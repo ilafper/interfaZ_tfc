@@ -94,7 +94,9 @@ input {
 }
 
 /*HOME*/
-
+.demas{
+  background-color:#0a0a0a;
+}
 .header {
   font-family: 'Joti One', cursive;
   display: flex;
@@ -144,7 +146,7 @@ input {
 
 .swiper {
   width: 100%;
-  height: 200px;
+  height: 400px;
 }
 
 .swiper-slide img {
@@ -158,32 +160,212 @@ input {
   border-top: 1px solid #666;
 }
 
+.seccion h2{
+  color: white;
+  font-family: 'Joti One', cursive;
+}
+
+.contenidoo{
+  display: flex;
+  flex-wrap: wrap;
+}
+
 .tarjetas {
   display: flex;
   gap: 20px;
   flex-wrap: wrap;
 }
 
-.manga-card {
-  background-color: #222;
-  border: 1px solid #fff;
-  border-radius: 10px;
-  width: 180px;
-  padding: 10px;
-  text-align: center;
+/*TARGETA DISEÑO*/
+.card{
+  display: flex;
+  background-color: #1b1b1b;
+  color: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  width: 400px;
+  font-family: 'Joti One', cursive;
+  box-shadow: 0 10px 20px #3543a1;
+  margin: 20px;
 }
 
-.manga-card img {
-  width: 100%;
-  border-radius: 8px;
+.manga-image {
+  width: 120px;
+  object-fit: cover;
 }
 
-.manga-card button {
-  margin-top: 10px;
-  background: red;
-  color: white;
-  border: none;
-  padding: 6px 10px;
+.manga-details {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: 1;
+}
+
+.manga-meta {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.75rem;
+  color: #ffffff;
+  margin-bottom: 4px;
+}
+
+.status {
+  background-color: #3949ab;
+  padding: 3px 8px;
+  border-radius: 6px;
+  display: inline-block;
+  margin-bottom: 4px;
+  font-size: 0.7rem;
+}
+
+.manga-title {
+  font-size: 1.2rem;
+  margin: 6px 0;
+  color: #fff;
+}
+
+.author {
+  font-size: 0.85rem;
+  margin-bottom: 8px;
+  color: #ccc;
+}
+
+.manga-tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.tag {
+  background-color: #333;
+  padding: 4px 8px;
   border-radius: 5px;
+  font-size: 0.7rem;
+}
+
+.manga-tags .tag:hover{
+  background-color: #3948abbb;
+}
+
+
+/*info targeta */
+.ficha-manga {
+  display: flex;
+  gap: 30px;
+  padding: 25px;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  max-width: 1000px;
+  margin: 40px auto;
+  font-family: 'Joti One', cursive, sans-serif;
+}
+
+.ficha-imagen img {
+  width: 240px;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.ficha-contenido {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ficha-contenido h1 {
+  font-size: 2rem;
+  margin: 0;
+}
+
+.ficha-contenido h3 {
+  font-size: 1.1rem;
+  color: #4a5568;
+  margin: 0;
+}
+
+.subtitulo {
+  font-style: italic;
+  color: #718096;
+}
+
+.generos {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.genero {
+  background-color: #edf2f7;
+  color: #2b6cb0;
+  padding: 6px 12px;
+  border-radius: 9999px;
+  font-size: 0.85rem;
+  font-weight: bold;
+}
+
+.sinopsis {
+  font-size: 0.95rem;
+  color: #4a5568;
+}
+
+.detalles {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 0.9rem;
+  color: #2d3748;
+}
+
+.detalles li {
+  margin-bottom: 5px;
+}
+
+.acciones {
+  margin-top: 15px;
+  display: flex;
+  gap: 10px;
+}
+
+.btn {
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: bold;
   cursor: pointer;
+  border: none;
+  font-size: 0.9rem;
+  transition: background 0.2s ease;
+}
+
+.lo-tengo {
+  background-color: #e0f2fe;
+  color: #0284c7;
+}
+
+.lo-tengo:hover {
+  background-color: #bae6fd;
+}
+
+.comprar {
+  background-color: #2b6cb0;
+  color: #fff;
+}
+
+.comprar:hover {
+  background-color: #2c5282;
+}
+
+@media (max-width: 768px) {
+  .ficha-manga {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .ficha-imagen img {
+    width: 70%;
+  }
 }
