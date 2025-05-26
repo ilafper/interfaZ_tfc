@@ -168,12 +168,7 @@ input {
 .contenidoo{
   display: flex;
   flex-wrap: wrap;
-}
-
-.tarjetas {
-  display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
+  justify-content: center;
 }
 
 /*TARGETA DISEÑO*/
@@ -183,7 +178,7 @@ input {
   color: #fff;
   border-radius: 12px;
   overflow: hidden;
-  width: 400px;
+  width: 420px;
   font-family: 'Joti One', cursive;
   box-shadow: 0 10px 20px #3543a1;
   margin: 20px;
@@ -261,7 +256,9 @@ input {
   margin: 40px auto;
   font-family: 'Joti One', cursive, sans-serif;
 }
-
+.ficha-imagen{
+  align-content: center;
+}
 .ficha-imagen img {
   width: 240px;
   height: auto;
@@ -299,12 +296,13 @@ input {
 }
 
 .genero {
-  background-color: #edf2f7;
-  color: #2b6cb0;
+  background-color:#2b6cb0;
+  color: #ffffff;
   padding: 6px 12px;
   border-radius: 9999px;
   font-size: 0.85rem;
   font-weight: bold;
+  cursor: pointer;
 }
 
 .sinopsis {
@@ -337,7 +335,6 @@ input {
   cursor: pointer;
   border: none;
   font-size: 0.9rem;
-  transition: background 0.2s ease;
 }
 
 .lo-tengo {
@@ -346,7 +343,8 @@ input {
 }
 
 .lo-tengo:hover {
-  background-color: #bae6fd;
+  background-color: #1377b1;
+  color: white;
 }
 
 .comprar {
@@ -355,7 +353,9 @@ input {
 }
 
 .comprar:hover {
-  background-color: #2c5282;
+  background-color: #ffffff;
+  color: #2b6cb0;
+  border: 2px solid #2b6cb0 ;
 }
 
 @media (max-width: 768px) {
