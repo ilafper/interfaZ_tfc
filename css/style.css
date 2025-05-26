@@ -32,7 +32,11 @@ body {
   justify-content: space-around;
   margin-bottom: 25px;
 }
-
+.tabs2 {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 25px;
+}
 .tab {
   flex: 1;
   text-align: center;
@@ -41,6 +45,9 @@ body {
   color: #aaa;
   font-weight: bold;
   border-bottom: 2px solid transparent;
+}
+.tab2{
+  cursor: pointer;
 }
 
 .tab.active {
