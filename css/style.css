@@ -94,6 +94,7 @@ input {
 }
 
 /*HOME*/
+
 .demas{
   background-color:#0a0a0a;
 }
@@ -357,6 +358,44 @@ input {
   color: #2b6cb0;
   border: 2px solid #2b6cb0 ;
 }
+
+
+/*PERFIL*/
+
+.coosa{
+  color: rgb(3, 3, 3);
+  font-family: 'Joti One', cursive;
+  width: 95%;
+  margin-left: 5%;
+}
+.carpetas {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.carpeta {
+    width: 150px;
+    text-align: center;
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 15px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease;
+    cursor: pointer;
+}
+
+.carpeta:hover {
+    transform: scale(1.05);
+}
+
+.carpeta img {
+    width: 80px;
+    margin-bottom: 10px;
+}
+
 
 @media (max-width: 768px) {
   .ficha-manga {
