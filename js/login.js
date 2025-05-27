@@ -40,4 +40,46 @@ $(document).ready(function () {
         }
     });
 
+    $('.checkregis').click(async function (e) {
+        e.preventDefault();
+
+        const nombre = $('#nameNew').val().trim();
+        const email = $('#emailNew').val().trim();
+        const password1 = $('#contresena1').val();
+        const password2 = $('#contrasena2').val();
+
+        if (!nombre || !email || !password1 || !password2) {
+            alert("Por favor, completa todos los campos.");
+            return;
+        }
+
+        if (password1 !== password2) {
+            alert("Las contraseñas no coinciden.");
+            return;
+        }
+
+        try {
+            const response = await $.ajax({
+                type: 'POST',
+                url: '/api/registerUser', // Ajusta la URL a tu backend
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    nombre: nombre,
+                    email: email,
+                    contrasenha: password1 
+                })
+            });
+
+            alert(response.mensaje);
+
+            if (response.success) {
+                cambiar('login'); // Cambia a pestaña login tras registrarse
+            }
+        } catch (error) {
+            alert(error.responseJSON?.mensaje || "Error en el servidor");
+            console.error(error);
+        }
+    });
+
+
 });
