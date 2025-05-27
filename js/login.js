@@ -63,11 +63,7 @@ $(document).ready(function () {
                 type: 'POST',
                 url: 'https://api-tfc-five.vercel.app/api/registrarse', // Ajusta la URL a tu backend
                 contentType: 'application/json',
-                data: JSON.stringify({
-                    nombre: nombre,
-                    email: email,
-                    contrasenha: password1 
-                })
+                data: JSON.stringify({nombre, email, password1 })
             });
 
             alert(response.mensaje);

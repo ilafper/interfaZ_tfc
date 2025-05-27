@@ -18,8 +18,7 @@ body {
 }
 
 .container {
-  outline: 5px solid blue;
-  width: 20% !important;
+  width: 300px !important;
   font-family: 'Joti One', cursive;
   background-color: #1a1a1a;
   border-radius: 15px;
