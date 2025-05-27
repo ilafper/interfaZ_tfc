@@ -61,7 +61,7 @@ $(document).ready(function () {
         try {
             const response = await $.ajax({
                 type: 'POST',
-                url: '/api/registerUser', // Ajusta la URL a tu backend
+                url: 'https://api-tfc-five.vercel.app/api/registrarse', // Ajusta la URL a tu backend
                 contentType: 'application/json',
                 data: JSON.stringify({
                     nombre: nombre,
