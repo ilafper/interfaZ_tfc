@@ -10,7 +10,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-image: url("../src/fondo.jpg");
+  background-image: url("../src/fondo2.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -31,11 +31,13 @@ body {
   justify-content: space-around;
   margin-bottom: 25px;
 }
+
 .tabs2 {
   display: flex;
   justify-content: space-around;
   margin-bottom: 25px;
 }
+
 .tab {
   flex: 1;
   text-align: center;
@@ -45,7 +47,8 @@ body {
   font-weight: bold;
   border-bottom: 2px solid transparent;
 }
-.tab2{
+
+.tab2 {
   cursor: pointer;
 }
 
@@ -63,12 +66,15 @@ body {
 }
 
 .avatar {
-  width: 70px;
-  height: 70px;
-  background-color: #fff;
-  border-radius: 50%;
-  margin: 0 auto 20px;
+  max-width: 300px; /* Limita el ancho del logo */
+  margin-left: 10px;
 }
+
+.avatar img {
+  width: 250px;
+  object-fit: contain;
+}
+
 
 label {
   color: #fff;
@@ -254,6 +260,48 @@ input {
   background-color: #3948abbb;
 }
 
+/*footer*/
+.footer {
+  background-color: #111;
+  color: #eee;
+  padding: 30px 20px;
+  font-family: 'Joti One', cursive;
+}
+
+.footer-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: auto;
+  text-align: center;
+}
+
+.footer-logo img {
+  width: 60px;
+  margin-bottom: 10px;
+}
+
+.footer-links a,
+.footer-social a {
+  color: #eee;
+  text-decoration: none;
+  margin: 0 10px;
+  transition: color 0.3s;
+}
+
+.footer-links a:hover,
+.footer-social a:hover {
+  color: #ff4081;
+}
+
+.footer-social img {
+  width: 24px;
+  margin: 0 5px;
+}
+
+
 
 /*info targeta */
 .ficha-manga {
@@ -425,5 +473,10 @@ input {
 
   .ficha-imagen img {
     width: 70%;
+  }
+
+  .footer-container {
+    flex-direction: column;
+    gap: 20px;
   }
 }

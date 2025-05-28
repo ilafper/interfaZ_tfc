@@ -5,7 +5,7 @@
 const swiper = new Swiper(".mySwiper", {
     loop: true,
     autoplay: {
-        delay: 5000,
+        delay: 10000,
     },
     slidesPerView: 1,
 });
@@ -17,7 +17,7 @@ function cargarMangas() {
     url: 'https://api-tfc-five.vercel.app/api/mangas',
     method: 'GET',
     success: function (mangas) {
-      const contenedor = $('.seccion');
+      const contenedor = $('.contenidoo');
       contenedor.empty();
 
       mangas.forEach(manga => {
@@ -43,7 +43,10 @@ function cargarMangas() {
           </div>
         `);
 
-        /* targeta.click para luego*/
+        tarjeta.click(function () {
+          localStorage.setItem('mangaSeleccionado', JSON.stringify(manga));
+          window.location.href = '../html/info.html';
+        });
 
         contenedor.append(tarjeta);
       });
@@ -55,13 +58,35 @@ function cargarMangas() {
 }
 
 cargarMangas();
+/*PARTE PARA RELLENAR LOS DETALLES DEL MANGA */
+$(document).ready(function () {
+  const manga = JSON.parse(localStorage.getItem('mangaSeleccionado'));
 
+  if (!manga) {
+    console.error('No se encontró información del manga.');
+    return;
+  }
 
+  $('.ficha-imagen img').attr('alt', `Portada de ${manga.nombre}`);
+  $('.ficha-contenido h1').text(manga.nombre);
+  $('.ficha-contenido h3').text(`#${manga._id.substring(manga._id.length - 3)}`); // O usa un número real si tienes
+  $('.subtitulo').text(manga.tipo || 'Manga');
+  $('.sinopsis').text(manga.sinopsis);
 
+  // Generar géneros
+  const generosHtml = (manga.genero || []).map(g => `<span class="genero">${g}</span>`).join('');
+  $('.generos').html(generosHtml);
 
-
-
-
+  // Detalles
+  $('.detalles').html(`
+    <li><strong>Autor:</strong> ${manga.autor}</li>
+    <li><strong>Volúmenes:</strong> ${manga.volumenes}</li>
+    <li><strong>Capítulos:</strong> ${manga.capitulos}</li>
+    <li><strong>Editorial:</strong> ${manga.editorial}</li>
+    <li><strong>Demografía:</strong> ${manga.demografia}</li>
+    <li><strong>Estado:</strong> ${manga.estado}</li>
+  `);
+});
 
 
 
