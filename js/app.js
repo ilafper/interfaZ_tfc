@@ -10,6 +10,20 @@ const swiper = new Swiper(".mySwiper", {
     slidesPerView: 1,
 });
 
+ function toggleMenu() {
+    document.getElementById("dropdownMenu").classList.toggle("active");
+  }
+
+  // Cierra el menú si se hace clic fuera de él
+  window.onclick = function(event) {
+    if (!event.target.matches('.avatar-icon')) {
+      const dropdown = document.getElementById("dropdownMenu");
+      if (dropdown.classList.contains('active')) {
+        dropdown.classList.remove('active');
+      }
+    }
+  }
+
 $(document).ready(function () {
 
 function cargarMangas() {
