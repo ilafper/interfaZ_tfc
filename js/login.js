@@ -71,6 +71,7 @@ $(document).ready(function () {
             if (response.success) {
                 cambiar('login'); // Cambia a pestaña login tras registrarse
             }
+            
         } catch (error) {
             alert(error.responseJSON?.mensaje || "Error en el servidor");
             console.error(error);
