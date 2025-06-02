@@ -64,7 +64,7 @@ $(document).ready(function () {
             </div>
           </div>
         `);
-            //si hacemos click manda la informacion del manga a otra pestaña donde se mostrara toda la informacion
+          //si hacemos click manda la informacion del manga a otra pestaña donde se mostrara toda la informacion
           tarjeta.click(function () {
             localStorage.setItem('mangaSeleccionado', JSON.stringify(manga));
             window.location.href = '../html/info.html';
@@ -96,17 +96,18 @@ $(document).ready(function () {
 
     // Generar géneros
     const generosHtml = (manga.genero || []).map(g => `<span class="genero">${g}</span>`).join('');
+    
     $('.generos').html(generosHtml);
 
     // Detalles
     $('.detalles').html(`
-    <li><strong>Autor:</strong> ${manga.autor}</li>
-    <li><strong>Volúmenes:</strong> ${manga.volumenes}</li>
-    <li><strong>Capítulos:</strong> ${manga.capitulos}</li>
-    <li><strong>Editorial:</strong> ${manga.editorial}</li>
-    <li><strong>Demografía:</strong> ${manga.demografia}</li>
-    <li><strong>Estado:</strong> ${manga.estado}</li>
-  `);
+      <li><strong>Autor:</strong> ${manga.autor}</li>
+      <li><strong>Volúmenes:</strong> ${manga.volumenes}</li>
+      <li><strong>Capítulos:</strong> ${manga.capitulos}</li>
+      <li><strong>Editorial:</strong> ${manga.editorial}</li>
+      <li><strong>Demografía:</strong> ${manga.demografia}</li>
+      <li><strong>Estado:</strong> ${manga.estado}</li>
+    `);
   });
 
 
