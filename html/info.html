@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Inicio - Mangas</title>
+  <title>Info - Mangas</title>
   <link href="https://fonts.googleapis.com/css2?family=Joti+One&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
   <link rel="stylesheet" href="../css/style.css" />
@@ -22,17 +22,34 @@
 
     </nav>
     <div class="avatara">
-      <img src="../src/avatar.png" alt="">
+      <div class="avatar-menu">
+        <img src="../src/avatar.png" alt="Avatar" class="avatar-icon" onclick="toggleMenu()" />
+
+        <div class="menu-dropdown" id="dropdownMenu">
+          <div class="menu-header">
+            <img src="../src/avatar.png" alt="Avatar">
+            <div>
+              <strong>jacky03</strong><br>
+              <a href="perfil.html">Ver perfil</a>
+            </div>
+          </div>
+          <ul>
+            <li><a href="#">Mi Cuenta</a></li>
+            <li><a href="#">Mi Suscripción</a></li>
+            <li><a href="#">Ayuda</a></li>
+            <li><a href="#">Ideas</a></li>
+            <li><a href="#">Desconectar</a></li>
+          </ul>
+        </div>
+      </div>
     </div>
   </header>
-
   <section class="ficha-manga">
     <div class="ficha-imagen">
       <img src="../src/frieren.png" alt="Portada de Frieren">
     </div>
 
     <div class="ficha-contenido">
-      <h3>#12</h3>
       <h1>Frieren: Beyond Journey’s End</h1>
       <p class="subtitulo">El viaje después de la aventura</p>
 
@@ -62,6 +79,26 @@
       </div>
     </div>
   </section>
+
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-logo">
+        <img src="../src/logito.png" alt="Logo" />
+        <p>Kumiko Manga © 2025</p>
+      </div>
+      <div class="footer-links">
+        <a href="#">Mangas</a>
+        <a href="#">Comics</a>
+        <a href="#">Manhwuas</a>
+        <a href="#">Contacto</a>
+      </div>
+      <div class="footer-social">
+        <a href="#"><img src="../src/avatar.png" alt="Facebook" /></a>
+        <a href="#"><img src="../src/avatar.png" alt="Twitter" /></a>
+        <a href="#"><img src="../src/avatar.png" alt="Instagram" /></a>
+      </div>
+    </div>
+  </footer>
 
 
 
