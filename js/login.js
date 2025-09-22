@@ -6,6 +6,8 @@ function cambiar(formId) {
     document.getElementById(formId).classList.add('active');
     document.querySelector(`.tab[onclick*="${formId}"]`).classList.add('active');
 }
+
+
 $(document).ready(function () {
     $('.checklogin').click(async function (e) {
         e.preventDefault();
