@@ -7,7 +7,6 @@ function cambiar(formId) {
     document.querySelector(`.tab[onclick*="${formId}"]`).classList.add('active');
 }
 
-
 $(document).ready(function () {
     $('.checklogin').click(async function (e) {
         e.preventDefault();
@@ -73,6 +72,7 @@ $(document).ready(function () {
             if (response.success) {
                 cambiar('login'); // Cambia a pestaña login tras registrarse
             }
+            
         } catch (error) {
             alert(error.responseJSON?.mensaje || "Error en el servidor");
             console.error(error);
