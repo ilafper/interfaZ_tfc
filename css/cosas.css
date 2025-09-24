@@ -6,6 +6,26 @@ body {
   color: #252525;
 }
 
+#ligthModeToggle {
+  border: 1px solid transparent;
+  /* borde invisible por defecto */
+  border-radius: 6px;
+  padding: 6px 10px;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  /* transición suave */
+}
+
+#ligthModeToggle:hover {
+  border: 1px solid purple;
+  box-shadow: 0 0 10px rgba(128, 0, 128, 0.8);
+  /* sombra morada */
+  transform: scale(1.1);
+  /* zoom */
+}
+
+
 .navbar {
   display: flex;
   flex-direction: row;
@@ -22,6 +42,14 @@ body {
 
 .avatar img {
   width: 50px;
+  border: 1px solid white;
+  border-radius: 50%;
+  padding: 5px;
+
+}
+
+.avatar {
+  background-color: white;
 }
 
 .partedos {
@@ -31,10 +59,11 @@ body {
   margin-top: 1%;
 }
 
-.search-bar input {
+.buscar input {
   padding: 9px 15px;
   width: 280px;
   border: 1px solid #ddd;
+  border-radius: 10px;
   background: #f8f8f8;
   color: #252525;
 }
@@ -81,13 +110,16 @@ body {
 }
 
 .cartasWrap {
+  width: 100%;
   margin-top: 4%;
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+  border: 1px solid white;
 }
 
 .card {
+  width: 50%;
   background: #fff;
   border-radius: 16px;
   overflow: hidden;
@@ -178,53 +210,36 @@ body {
   color: #111;
 }
 
-/* Modo oscuro */
-body.claro-modo .card {
-  background: #1e1e1e;
-  color: #f5f5f5;
-}
-
-body.claro-modo .tags span {
-  background: #333;
-  color: #ddd;
-}
-
-body.claro-modo .meta {
-  color: #ccc;
-}
-
-body.claro-modo .interactions button {
-  background: #2a2a2a;
-  color: #f5f5f5;
-}
-
 /* 🌙 Modo oscuro */
 body.dark-mode {
-  background: #121212;
+  background-color: #040144;
   /* Dark background */
   color: #f5f5f5;
   /* Light text */
 }
 
 body.dark-mode .navbar {
-  background: #1e1e1e;
+  background-color: #040144;
   color: #f5f5f5;
   border-color: #333;
+  border-bottom: 2px solid rgb(134, 78, 240);
+
 }
 
-body.dark-mode .search-bar input {
+body.dark-mode .buscar input {
   background: #333;
-  border-color: #555;
-  color: #f5f5f5;
+  border-color: #ffffff;
+  color: #fff7f7;
 }
+
 
 body.dark-mode .nav-links a {
   color: #f5f5f5;
 }
 
 body.dark-mode .sidebar {
-  background: #1a1a1a;
-  border-color: #333;
+  background-color: #040144;
+  border: 2px solid #6513fd;
 }
 
 body.dark-mode .filtro h4 {
