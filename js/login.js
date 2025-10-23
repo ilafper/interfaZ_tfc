@@ -21,7 +21,7 @@ $(document).ready(function () {
 
         try {
             const response = await $.ajax({
-                type: 'POST',
+                type: 'GET',
                 url: 'https://api-tfc-five.vercel.app/api/checkLogin',
                 contentType: 'application/json',
                 data: JSON.stringify({ nombre, password })
