@@ -21,13 +21,12 @@ $(document).ready(function () {
 
         try {
             const response = await $.ajax({
-                type: 'GET',
+                type: 'POST',
                 url: 'https://api-tfc-five.vercel.app/api/checkLogin',
                 contentType: 'application/json',
                 data: JSON.stringify({ nombre, password })
             });
 
-            // Si llega aquí, login exitoso
             alert(response.mensaje);
             window.location.href = "../html/home.html";
 
@@ -64,7 +63,7 @@ $(document).ready(function () {
                 type: 'POST',
                 url: 'https://api-tfc-five.vercel.app/api/registrarse',
                 contentType: 'application/json',
-                data: JSON.stringify({nombre, email, password1 })
+                data: JSON.stringify({ nombre, email, password1 })
             });
 
             alert(response.mensaje);
@@ -72,12 +71,10 @@ $(document).ready(function () {
             if (response.success) {
                 cambiar('login'); // Cambia a pestaña login tras registrarse
             }
-            
+
         } catch (error) {
             alert(error.responseJSON?.mensaje || "Error en el servidor");
             console.error(error);
         }
     });
-
-
 });
