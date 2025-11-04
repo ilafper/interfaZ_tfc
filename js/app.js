@@ -1,11 +1,11 @@
 
 $(document).ready(function () {
-  // Dentro de $(document).ready
+ 
   // Delegamos el click a .cartasWrap que ya existe al inicio
   $('.cartasWrap').on('click', '.heart-btn', function () {
     $(this).toggleClass('liked');
 
-    // Opcional: cambiar color del SVG directamente
+   
     const svg = $(this).find('.heart-icon');
     if ($(this).hasClass('liked')) {
       svg.attr('fill', '#e0245e'); // rojo cuando está "like"
@@ -69,6 +69,7 @@ $(document).ready(function () {
 
   cargarMangas();
 
+  // Función de búsqueda
   function buscarMangas() {
     const $input = $(".buscar input");
 
@@ -82,13 +83,20 @@ $(document).ready(function () {
         return;
       }
 
+      
       $.ajax({
         url: `https://api-tfc-five.vercel.app/api/mangas/buscar?nombre=${encodeURIComponent(nombre)}`,
         method: "GET",
         dataType: "json",
-        success: mangasBuscados,
+        success: function(mangas) {
+          console.log("Mangas encontrados:", mangas); 
+          mangasBuscados(mangas);
+        },
         error: function (err) {
           console.error("Error al buscar mangas:", err);
+          const contenedor = $(".cartasWrap");
+          contenedor.empty();
+          contenedor.append("<p style='text-align: center; padding: 2rem; color: #64748b;'>Error al buscar. Intenta de nuevo.</p>");
         }
       });
     });
@@ -99,28 +107,27 @@ $(document).ready(function () {
     contenedor.empty();
 
     if (!mangas || mangas.length === 0) {
-      contenedor.append("<p>No se encontraron mangas.</p>");
+      contenedor.append("<p style='text-align: center; padding: 2rem; color: #64748b;'>No se encontraron mangas con ese nombre.</p>");
       return;
     }
 
-    for (let i = 0; i < mangas.length; i++) {
-      const cada_buscado = mangas[i];
-      const generos = cada_buscado.genero || [];
+    mangas.forEach(manga => {
+      const generos = manga.genero || [];
       const tags = generos.slice(0, 2).map(g => `<span class="tag">${g}</span>`).join('');
       const extraTag = generos.length > 2 ? `<span class="tag">+${generos.length - 2}</span>` : '';
 
       const tarjeta = $(`
         <div class="card">
-          <img src="../src/frieren.png" alt="${cada_buscado.nombre}">
+          <img src="../src/frieren.png" alt="${manga.nombre}">
           <div class="card-info">
-            <h3>${cada_buscado.nombre}</h3>
-            <p>por ${cada_buscado.autor}</p>
+            <h3>${manga.nombre}</h3>
+            <p>por ${manga.autor}</p>
             <div class="tags">
               ${tags}${extraTag}
             </div>
             <div class="meta">
-              <span>${cada_buscado.volumenes || "-"} volúmenes</span>
-              <span>${cada_buscado.capitulos || "-"} capítulos</span>
+              <span>${manga.volumenes || 0} volúmenes</span>
+              <span>${manga.capitulos || 0} capítulos</span>
             </div>
             <div class="interactions">
               <button class="heart-btn" aria-label="Me gusta">
@@ -143,17 +150,11 @@ $(document).ready(function () {
       `);
 
       contenedor.append(tarjeta);
-    }
+    });
   }
-  mangasBuscados();
+  
 
+  
+  // Inicializar búsqueda
   buscarMangas();
-
-
-
-
-
-
-
-
 });

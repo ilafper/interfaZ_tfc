@@ -59,6 +59,7 @@ $(document).ready(function () {
         }
 
         try {
+            /*Api login*/
             const response = await $.ajax({
                 type: 'POST',
                 url: 'https://api-tfc-five.vercel.app/api/registrarse',

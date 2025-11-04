@@ -1,6 +1,4 @@
-/* ========================================
-   LOGIN - DISEÑO MODERNO CON TEMA OSCURO
-   ======================================== */
+/*Login*/
 
 * {
   margin: 0;
@@ -8,10 +6,7 @@
   box-sizing: border-box;
 }
 
-html {
-  -webkit-text-size-adjust: 100%;
-  -ms-text-size-adjust: 100%;
-}
+
 
 body {
   width: 100%;
@@ -71,7 +66,7 @@ body {
   50% { transform: translate(50px, 50px) scale(1.1); }
 }
 
-/* Contenedor principal */
+/* Modal login*/
 .container {
   width: 420px !important;
   background: rgba(10, 10, 15, 0.9);
@@ -79,10 +74,7 @@ body {
   border: 1px solid rgba(45, 40, 94, 0.4);
   border-radius: 24px;
   padding: 40px 35px;
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.6),
-    0 0 60px rgba(45, 40, 94, 0.2),
-    inset 0 0 20px rgba(45, 40, 94, 0.05);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6),0 0 60px rgba(45, 40, 94, 0.2), inset 0 0 20px rgba(45, 40, 94, 0.05);
   position: relative;
   z-index: 10;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -335,31 +327,46 @@ input:hover {
   text-decoration: underline;
 }
 
-/* ========================================
-   RESPONSIVE DESIGN
-   ======================================== */
+/*diseño  responsive*/
 
-/* Tablets y pantallas medianas (768px - 1024px) */
+/* Tablets (768px - 1024px) */
 @media (max-width: 1024px) {
   .container {
-    width: 450px !important;
+    width: 85% !important;
+    max-width: 450px;
     padding: 35px 30px;
+  }
+
+  .avatar img {
+    width: 90px;
+    height: 90px;
   }
 }
 
-/* Tablets pequeñas (481px - 768px) */
+/* Móviles (menos de 768px) */
 @media (max-width: 768px) {
+  .inicio {
+    padding: 0;
+    align-items: stretch;
+  }
+
   .inicio::before,
   .inicio::after {
-    width: 300px;
-    height: 300px;
+    width: 250px;
+    height: 250px;
   }
 
   .container {
-    width: 85% !important;
-    max-width: 400px;
-    padding: 35px 28px;
-    margin: 15px;
+    width: 100% !important;
+    max-width: 100%;
+    min-height: 100vh;
+    padding: 40px 30px;
+    margin: 0;
+    border-radius: 0;
+    border: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 
   .tabs {
@@ -368,243 +375,41 @@ input:hover {
   }
 
   .tab {
-    font-size: 12px;
-    padding: 10px 15px;
-    letter-spacing: 0.3px;
+    font-size: 13px;
+    padding: 12px 15px;
   }
 
   .avatar {
-    margin-bottom: 20px;
+    margin-bottom: 30px;
   }
 
   .avatar img {
-    width: 85px;
-    height: 85px;
+    width: 90px;
+    height: 90px;
   }
 
   label {
-    font-size: 12px;
-    margin-top: 15px;
-    margin-bottom: 7px;
-  }
-
-  input {
-    padding: 13px 16px;
-    font-size: 14px;
-  }
-
-  .botonUni {
-    margin-top: 25px;
-    padding: 14px;
     font-size: 13px;
-    letter-spacing: 0.8px;
-  }
-
-  .form-footer {
-    margin-top: 18px;
-  }
-
-  .form-footer a {
-    font-size: 12px;
-  }
-}
-
-/* Móviles (320px - 480px) */
-@media (max-width: 480px) {
-  .inicio {
-    padding: 10px;
-  }
-
-  .inicio::before {
-    width: 250px;
-    height: 250px;
-    top: -150px;
-    left: -150px;
-  }
-
-  .inicio::after {
-    width: 200px;
-    height: 200px;
-    bottom: -100px;
-    right: -100px;
-  }
-
-  .container {
-    width: 95% !important;
-    max-width: 340px;
-    padding: 25px 20px;
-    margin: 10px;
-    border-radius: 20px;
-  }
-
-  .tabs {
-    padding: 4px;
-    margin-bottom: 20px;
-    border-radius: 14px;
-  }
-
-  .tab {
-    font-size: 11px;
-    padding: 9px 12px;
-    border-radius: 10px;
-    letter-spacing: 0.2px;
-  }
-
-  .avatar {
-    margin-bottom: 18px;
-  }
-
-  .avatar img {
-    width: 75px;
-    height: 75px;
-  }
-
-  label {
-    font-size: 11px;
-    margin-top: 14px;
-    margin-bottom: 6px;
-  }
-
-  input {
-    padding: 12px 14px;
-    font-size: 14px;
-    border-radius: 10px;
-  }
-
-  input::placeholder {
-    font-size: 13px;
-  }
-
-  .botonUni {
-    margin-top: 22px;
-    padding: 13px;
-    font-size: 12px;
-    letter-spacing: 0.6px;
-    border-radius: 10px;
-  }
-
-  .form-footer {
     margin-top: 16px;
-  }
-
-  .form-footer a {
-    font-size: 11px;
-  }
-
-  .form-message {
-    font-size: 12px;
-    padding: 10px;
-  }
-}
-
-/* Móviles muy pequeños (menos de 360px) */
-@media (max-width: 360px) {
-  .container {
-    width: 98% !important;
-    padding: 20px 16px;
-  }
-
-  .tabs {
-    flex-direction: column;
-    gap: 5px;
-    padding: 6px;
-  }
-
-  .tab {
-    width: 100%;
-    padding: 10px;
-  }
-
-  .avatar img {
-    width: 65px;
-    height: 65px;
-  }
-
-  label {
-    font-size: 10px;
+    margin-bottom: 8px;
   }
 
   input {
-    padding: 11px 12px;
-    font-size: 13px;
+    padding: 14px 18px;
+    font-size: 15px;
   }
 
   .botonUni {
-    padding: 12px;
-    font-size: 11px;
-  }
-}
-
-/* Landscape mode para móviles */
-@media (max-height: 600px) and (orientation: landscape) {
-  .inicio {
-    padding: 15px 10px;
-    min-height: auto;
-  }
-
-  .container {
-    max-width: 500px;
-    padding: 20px 25px;
-    margin: 10px auto;
-  }
-
-  .avatar {
-    margin-bottom: 10px;
-  }
-
-  .avatar img {
-    width: 60px;
-    height: 60px;
-  }
-
-  label {
-    margin-top: 10px;
-    margin-bottom: 4px;
-  }
-
-  input {
-    padding: 10px 14px;
-  }
-
-  .botonUni {
-    margin-top: 15px;
-    padding: 11px;
+    margin-top: 30px;
+    padding: 16px;
+    font-size: 14px;
   }
 
   .form-footer {
-    margin-top: 12px;
-  }
-}
-
-/* Ajustes para pantallas muy grandes */
-@media (min-width: 1440px) {
-  .container {
-    width: 480px !important;
-    padding: 45px 40px;
-  }
-
-  .tab {
-    font-size: 15px;
-    padding: 14px 22px;
-  }
-
-  .avatar img {
-    width: 110px;
-    height: 110px;
-  }
-
-  label {
-    font-size: 14px;
     margin-top: 20px;
   }
 
-  input {
-    padding: 16px 20px;
-    font-size: 16px;
-  }
-
-  .botonUni {
-    padding: 16px;
-    font-size: 15px;
+  .form-footer a {
+    font-size: 13px;
   }
 }
