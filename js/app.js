@@ -22,8 +22,13 @@ $(document).ready(function () {
       success: function (mangas) {
         const contenedor = $('.cartasWrap');
         contenedor.empty();
+        //recorrer los manngass
 
-        mangas.forEach(manga => {
+        for (let i = 0; i < mangas.length; i++) {
+          const manga = mangas[i];
+          
+         console.log(manga);
+          
           const generos = manga.genero || [];
           //añadir los generos del manga.
           const tags = generos.slice(0, 2).map(g => `<span class="tag">${g}</span>`).join('');
@@ -62,7 +67,7 @@ $(document).ready(function () {
         `);
           // Añadir tarjeta al contenedor
           contenedor.append(tarjeta);
-        });
+        }
       },
     });
   }
@@ -111,7 +116,8 @@ $(document).ready(function () {
       return;
     }
 
-    mangas.forEach(manga => {
+    for (let j = 0; j < mangas.length; j++) {
+      const manga = mangas[j];
       const generos = manga.genero || [];
       const tags = generos.slice(0, 2).map(g => `<span class="tag">${g}</span>`).join('');
       const extraTag = generos.length > 2 ? `<span class="tag">+${generos.length - 2}</span>` : '';
@@ -150,7 +156,7 @@ $(document).ready(function () {
       `);
 
       contenedor.append(tarjeta);
-    });
+    }
   }
   
 
