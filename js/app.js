@@ -27,7 +27,7 @@ $(document).ready(function () {
         for (let i = 0; i < mangas.length; i++) {
           const manga = mangas[i];
           
-         console.log(manga);
+          //console.log(manga);
           
           const generos = manga.genero || [];
           //añadir los generos del manga.
@@ -36,7 +36,7 @@ $(document).ready(function () {
           const extraTag = generos.length > 2 ? `<span class="tag">+${generos.length - 2}</span>` : '';
 
           const tarjeta = $(`
-          <div class="card">
+          <div class="card" data-manga='${JSON.stringify(manga)}'>
                     <img src="../src/frieren.png"  alt="${manga.nombre}>
                     <div class="card-info">
                         <h3>${manga.nombre}</h3>
@@ -65,6 +65,8 @@ $(document).ready(function () {
                     </div>
                 </div>
         `);
+            console.log(tarjeta);
+            
           // Añadir tarjeta al contenedor
           contenedor.append(tarjeta);
         }
