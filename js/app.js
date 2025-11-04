@@ -12,7 +12,15 @@ $(document).ready(function () {
   // 💾 "Guardar" → tampoco abre modal
   $('.cartasWrap').on('click', '.guardar', function (e) {
     e.stopPropagation();
-    alert('Guardado (demo)');
+    
+    //mas adelante
+
+
+
+
+
+
+
   });
 
   //carga los mangas 
