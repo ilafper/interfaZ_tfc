@@ -345,6 +345,9 @@ input:hover {
 
 /* Móviles (menos de 768px) */
 @media (max-width: 768px) {
+  body{
+    width: 100%;
+  }
   .inicio {
     padding: 0;
     align-items: stretch;
