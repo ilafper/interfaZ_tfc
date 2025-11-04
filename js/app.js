@@ -1,17 +1,18 @@
 
 $(document).ready(function () {
- 
-  // Delegamos el click a .cartasWrap que ya existe al inicio
-  $('.cartasWrap').on('click', '.heart-btn', function () {
-    $(this).toggleClass('liked');
 
-   
+
+  $('.cartasWrap').on('click', '.heart-btn', function (e) {
+    e.stopPropagation(); // evita abrir el modal
+    $(this).toggleClass('liked');
     const svg = $(this).find('.heart-icon');
-    if ($(this).hasClass('liked')) {
-      svg.attr('fill', '#e0245e'); // rojo cuando está "like"
-    } else {
-      svg.attr('fill', 'none'); // transparente cuando no está
-    }
+    svg.attr('fill', $(this).hasClass('liked') ? '#e0245e' : 'none');
+  });
+
+  // 💾 "Guardar" → tampoco abre modal
+  $('.cartasWrap').on('click', '.guardar', function (e) {
+    e.stopPropagation();
+    alert('Guardado (demo)');
   });
 
   //carga los mangas 
@@ -26,9 +27,9 @@ $(document).ready(function () {
 
         for (let i = 0; i < mangas.length; i++) {
           const manga = mangas[i];
-          
+
           //console.log(manga);
-          
+
           const generos = manga.genero || [];
           //añadir los generos del manga.
           const tags = generos.slice(0, 2).map(g => `<span class="tag">${g}</span>`).join('');
@@ -65,11 +66,15 @@ $(document).ready(function () {
                     </div>
                 </div>
         `);
-            console.log(tarjeta);
-            
+
+
+          console.log(manga);
+
           // Añadir tarjeta al contenedor
           contenedor.append(tarjeta);
         }
+
+
       },
     });
   }
@@ -90,13 +95,13 @@ $(document).ready(function () {
         return;
       }
 
-      
+
       $.ajax({
         url: `https://api-tfc-five.vercel.app/api/mangas/buscar?nombre=${encodeURIComponent(nombre)}`,
         method: "GET",
         dataType: "json",
-        success: function(mangas) {
-          console.log("Mangas encontrados:", mangas); 
+        success: function (mangas) {
+          console.log("Mangas encontrados:", mangas);
           mangasBuscados(mangas);
         },
         error: function (err) {
@@ -108,7 +113,7 @@ $(document).ready(function () {
       });
     });
   }
-  
+
   function mangasBuscados(mangas) {
     const contenedor = $(".cartasWrap");
     contenedor.empty();
@@ -160,9 +165,45 @@ $(document).ready(function () {
       contenedor.append(tarjeta);
     }
   }
-  
 
-  
+
+
   // Inicializar búsqueda
   buscarMangas();
+
+
+
+
+  //modal
+
+  // Mostrar modal
+  $('.cartasWrap').on('click', '.card', function () {
+    const manga = JSON.parse($(this).attr('data-manga'));
+
+    const modal = $('.modalManga section');
+    modal.html(`
+    <div class="modal-content">
+      <h2>${manga.nombre}</h2>
+      <p><strong>Autor:</strong> ${manga.autor}</p>
+      <p><strong>Volúmenes:</strong> ${manga.volumenes}</p>
+      <p><strong>Capítulos:</strong> ${manga.capitulos}</p>
+      <p><strong>Géneros:</strong> ${(manga.genero || []).join(', ')}</p>
+      <button class="cerrarModal">Cerrar</button>
+    </div>
+  `);
+
+    $('.modalManga').css('display', 'flex').addClass('show');
+  });
+
+  // Cerrar modal
+  $('.modalManga').on('click', '.cerrarModal', function () {
+    $('.modalManga').removeClass('show').fadeOut(200);
+  });
+
+  $('.modalManga').on('click', function (e) {
+    if ($(e.target).is('.modalManga')) {
+      $(this).removeClass('show').fadeOut(200);
+    }
+  });
+
 });
