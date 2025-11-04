@@ -6,6 +6,17 @@
   box-sizing: border-box;
 }
 
+html, body {
+  height: 100%;
+}
+
+/* evitar scroll horizontal inesperado y rebotes en móviles */
+body {
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: none;
+}
+
 
 
 body {
@@ -359,17 +370,30 @@ input:hover {
     height: 250px;
   }
 
+  /* ajustar posiciones para evitar overflow en pantallas pequeñas */
+  .inicio::before {
+    top: -150px;
+    left: -150px;
+  }
+
+  .inicio::after {
+    bottom: -120px;
+    right: -120px;
+  }
+
   .container {
     width: 100% !important;
     max-width: 100%;
-    min-height: 100vh;
-    padding: 40px 30px;
+    height: 100vh; /* ocupar toda la pantalla en móvil */
+    padding: 30px 20px;
     margin: 0;
     border-radius: 0;
     border: none;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    overflow-y: auto; /* si el contenido excede, que solo el contenedor haga scroll */
+    -webkit-overflow-scrolling: touch;
   }
 
   .tabs {
@@ -415,4 +439,11 @@ input:hover {
   .form-footer a {
     font-size: 13px;
   }
+}
+
+/* Seguridad extra: evitar que imágenes o SVGs provoquen overflow */
+img, svg {
+  max-width: 100%;
+  height: auto;
+  display: block;
 }
