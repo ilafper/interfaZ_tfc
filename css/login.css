@@ -382,16 +382,20 @@ input:hover {
   }
 
   .container {
+    position: fixed;
+    inset: 0; /* top:0; right:0; bottom:0; left:0 */
+    z-index: 20;
     width: 100% !important;
     max-width: 100%;
     height: 100vh; /* ocupar toda la pantalla en móvil */
-    padding: 30px 20px;
+    padding: 20px 16px;
     margin: 0;
     border-radius: 0;
     border: none;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    align-items: center; /* centrar horizontalmente */
+    justify-content: center; /* centrar verticalmente */
     overflow-y: auto; /* si el contenido excede, que solo el contenedor haga scroll */
     -webkit-overflow-scrolling: touch;
   }
