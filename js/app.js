@@ -89,7 +89,7 @@ $(document).ready(function () {
                             <span>${manga.capitulos} capítulos</span>
                         </div>
                         <div class="interactions">
-                            <button class="heart-btn" aria-label="Me gusta">
+                            <button class="heart-btn" data-id="${manga._id}" aria-label="Me gusta">
                                 <svg class="heart-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#e0245e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M12 21C12 21 5 14.5 5 9.5C5 6.42 7.42 4 10.5 4C12 4 13.5 5 14 6C14.5 5 16 4 17.5 4C20.58 4 23 6.42 23 9.5C23 14.5 16 21 16 21H12Z"/>
                                 </svg>
@@ -355,5 +355,48 @@ $(document).ready(function () {
       $(this).removeClass('show').fadeOut(200);
     }
   });
+
+
+
+  //fUNCIONLAIDAD MANGA GUSTADO
+
+  $('.heart-btn').click(async function() {
+     const mangaId = $(this).data('id'); // obtenemos el id del manga
+     console.log(mangaId);
+     
+    
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 });
