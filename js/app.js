@@ -1,6 +1,23 @@
 
 $(document).ready(function () {
 
+  // Modal de perfil
+  $('#avatarBtn').on('click', function(e) {
+    e.stopPropagation();
+    $('#modalPerfil').toggleClass('show');
+  });
+
+  // Cerrar modal de perfil al hacer clic fuera
+  $(document).on('click', function(e) {
+    if (!$(e.target).closest('#avatarBtn, #modalPerfil').length) {
+      $('#modalPerfil').removeClass('show');
+    }
+  });
+
+  // Evitar que el modal se cierre al hacer clic dentro
+  $('#modalPerfil').on('click', function(e) {
+    e.stopPropagation();
+  });
 
   $('.cartasWrap').on('click', '.heart-btn', function (e) {
     e.stopPropagation(); // evita abrir el modal
@@ -13,15 +30,15 @@ $(document).ready(function () {
   $('.cartasWrap').on('click', '.guardar', function (e) {
     e.stopPropagation();
     
-    //mas adelante
-
-
-
-
-
-
 
   });
+
+  const usuario = JSON.parse(localStorage.getItem('usuario'));
+
+  if (usuario) {
+      document.getElementById('nombreUsuario').textContent = usuario.nombre;
+      document.getElementById('emailUsuario').textContent = usuario.email;
+  }
 
   //carga los mangas 
   function cargarMangas() {
@@ -40,17 +57,25 @@ $(document).ready(function () {
 
           const generos = manga.genero || [];
           //añadir los generos del manga.
-          const tags = generos.slice(0, 2).map(g => `<span class="tag">${g}</span>`).join('');
-          // si hay mas, añadir el numero del los que halla
-          const extraTag = generos.length > 2 ? `<span class="tag">+${generos.length - 2}</span>` : '';
+          let tags = '';
 
+
+          for (let j = 0; j < 2 && j < generos.length; j++) {
+            tags += `<span class="cada_genero">${generos[j]}</span>`;
+          }
+
+          // si hay mas, añadir el numero del los que halla
+          //maximo 2
+          const extraTag = generos.length > 2 ? `<span class="cada_genero">+${generos.length - 2}</span>` : '';
+          // meter los datos del manga en la tarjeta, para que cuando se abra el modal cargarlo.
           const tarjeta = $(`
+            
           <div class="card" data-manga='${JSON.stringify(manga)}'>
                     <img src="../src/frieren.png"  alt="${manga.nombre}>
                     <div class="card-info">
                         <h3>${manga.nombre}</h3>
                         <p>por ${manga.autor}</p>
-                        <div class="tags">
+                        <div class="generos">
                           ${tags}
                           ${extraTag}
                         </div>
@@ -78,7 +103,7 @@ $(document).ready(function () {
 
           console.log(manga);
 
-          // Añadir tarjeta al contenedor
+          // Añadir targeta
           contenedor.append(tarjeta);
         }
 
@@ -131,10 +156,15 @@ $(document).ready(function () {
       return;
     }
 
-    for (let j = 0; j < mangas.length; j++) {
-      const manga = mangas[j];
-      const generos = manga.genero || [];
-      const tags = generos.slice(0, 2).map(g => `<span class="tag">${g}</span>`).join('');
+    for (let i = 0; i < mangas.length; i++) {
+      const manga = mangas[i];
+      const generos = manga.genero;
+      
+      let tags = '';
+      for (let j = 0; j < 2 && j < generos.length; j++) {
+        tags += `<span class="tag">${generos[j]}</span>`;
+      }
+      
       const extraTag = generos.length > 2 ? `<span class="tag">+${generos.length - 2}</span>` : '';
 
       const tarjeta = $(`
@@ -188,22 +218,129 @@ $(document).ready(function () {
   $('.cartasWrap').on('click', '.card', function () {
     const manga = JSON.parse($(this).attr('data-manga'));
 
-    const modal = $('.modalManga section');
-    modal.html(`
-    <div class="modal-content">
-      <h2>${manga.nombre}</h2>
-      <p><strong>Autor:</strong> ${manga.autor}</p>
-      <p><strong>Volúmenes:</strong> ${manga.volumenes}</p>
-      <p><strong>Capítulos:</strong> ${manga.capitulos}</p>
-      <p><strong>Géneros:</strong> ${(manga.genero || []).join(', ')}</p>
-      <button class="cerrarModal">Cerrar</button>
-    </div>
-  `);
+    // imagen
+    $('#modal-manga-image').attr('src', '../src/frieren.png').attr('alt', manga.nombre);
+    
+    // Rellenar título
+    $('#modal-manga-titulo').text(manga.nombre);
+    
+    // Rellenar estado
+    $('#modal-manga-estado').text('En emisión');
+    
+    // Rellenar sinopsis (si existe en los datos)
+    const sinopsis = manga.sinopsis || 'Una historia épica de piratas, donde narra la historia de "Monkey D. Luffy" quien cuando tenia 7 años, comió accidentalmente una "Akuma no mi"(Futa del diablo) la cual le dio poderes de goma.';
+    $('#modal-manga-sinopsis').text(sinopsis);
+    
+    // Rellenar géneros
+    const generos = manga.genero || [];
+    let generosHTML = '';
+    for (let i = 0; i < generos.length; i++) {
+      generosHTML += `<span class="genero-pill">${generos[i]}</span>`;
+    }
+    $('#modal-generos-list').html(generosHTML);
+
+    // Generar el HTML de los volúmenes con capítulos desplegables
+    let volumenesHTML = '';
+    const temporadas = manga.temporadas || [];
+    const totalCapitulos = manga.capitulos || 0;
+    
+    // Actualizar título de episodios
+    $('#modal-episodios-titulo').text(`Episodios del 1 al ${totalCapitulos}`);
+    
+    // Recorrer las temporadas (tomos) del manga
+    if (temporadas.length > 0) {
+      for (let i = 0; i < temporadas.length; i++) {
+        const temporada = temporadas[i];
+        const tomoNum = temporada.tomo;
+        const capsDelTomo = temporada.capitulos || [];
+        
+        let capitulosHTML = '';
+        // Recorrer los capítulos de este tomo
+        for (let j = 0; j < capsDelTomo.length; j++) {
+          const capNum = capsDelTomo[j];
+          capitulosHTML += `
+            <div class="capitulo-item">
+              <span>Tomo ${tomoNum} - Cap ${capNum}</span>
+            </div>
+          `;
+        }
+        
+        volumenesHTML += `
+          <div class="volumen-item">
+            <div class="volumen-header">
+              <div class="volumen-header-left">
+                <span class="volumen-titulo">Tomo ${tomoNum}</span>
+              </div>
+              <div class="volumen-header-right">
+                <button class="btn-visto" data-tomo="${tomoNum}" onclick="event.stopPropagation()">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
+                    <path fill="currentColor" d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5s5 2.24 5 5s-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3s3-1.34 3-3s-1.34-3-3-3z"/>
+                  </svg>
+                  <span>Visto</span>
+                </button>
+                <svg class="chevron-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+                  <path fill="currentColor" d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6l-6-6l1.41-1.41z"/>
+                </svg>
+              </div>
+            </div>
+            <div class="capitulos-lista" style="display: none;">
+              ${capitulosHTML}
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    $('#modal-volumenes-lista').html(volumenesHTML);
 
     $('.modalManga').css('display', 'flex').addClass('show');
   });
 
-  // Cerrar modal
+  // Toggle desplegable de sección completa de episodios
+  $('.modalManga').on('click', '.toggle-episodios', function (e) {
+    e.stopPropagation();
+    const $volumenes = $('#modal-volumenes-lista');
+    const $chevron = $(this).find('.chevron-icon');
+    
+    $volumenes.slideToggle(300);
+    $chevron.toggleClass('rotated');
+  });
+
+  // Toggle desplegable de capítulos
+  $('.modalManga').on('click', '.volumen-header', function (e) {
+    // No expandir si se hizo clic en el botón de visto
+    if ($(e.target).closest('.btn-visto').length) {
+      return;
+    }
+    
+    const $this = $(this);
+    const $capitulos = $this.next('.capitulos-lista');
+    const $chevron = $this.find('.chevron-icon');
+    
+    $capitulos.slideToggle(300);
+    $chevron.toggleClass('rotated');
+  });
+
+  // Toggle botón de visto
+  $('.modalManga').on('click', '.btn-visto', function (e) {
+    e.stopPropagation();
+    $(this).toggleClass('visto');
+    
+    const tomoNum = $(this).data('tomo');
+    const isVisto = $(this).hasClass('visto');
+    
+    // Cambiar el texto del botón
+    if (isVisto) {
+      $(this).find('span').text('Visto');
+      console.log(`Tomo ${tomoNum} marcado como visto`);
+      // Aquí puedes guardar el estado en localStorage o base de datos
+    } else {
+      $(this).find('span').text('Visto');
+      console.log(`Tomo ${tomoNum} desmarcado`);
+    }
+  });
+
+  // Cerrar modal.
   $('.modalManga').on('click', '.cerrarModal', function () {
     $('.modalManga').removeClass('show').fadeOut(200);
   });

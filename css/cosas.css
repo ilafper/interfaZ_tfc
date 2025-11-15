@@ -70,25 +70,28 @@ body {
   background-clip: text;
 }
 
+.avatar {
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .avatar img {
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  border: 2px solid rgba(203, 213, 225, 0.5);
+  border: 2px solid rgba(104, 49, 102, 0.4);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  object-fit: cover;
 }
 
 .avatar img:hover {
-  border-color: #3b82f6;
-  transform: scale(1.08);
-  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.25);
-}
-
-.avatar {
-  background-color: white;
-  border-radius: 50%;
-  cursor: pointer;
+  border-color: #683166;
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(104, 49, 102, 0.4);
 }
 
 /* Contenedor principal */
@@ -358,16 +361,16 @@ body {
   line-height: 1.5;
 }
 
-/* Tags mejorados */
-.tags {
+/* cada_generos mejorados */
+.cada_generos {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
   margin-bottom: 12px;
 }
 
-.tags span,
-.tag {
+.cada_generos span,
+.cada_genero {
   font-size: 0.7rem;
   padding: 5px 12px;
   background: rgba(59, 130, 246, 0.08);
@@ -378,8 +381,8 @@ body {
   border: 1px solid rgba(59, 130, 246, 0.15);
 }
 
-.tags span:hover,
-.tag:hover {
+.cada_generos span:hover,
+.cada_genero:hover {
   background: rgba(59, 130, 246, 0.15);
   color: #2563eb;
   transform: translateY(-2px);
@@ -387,7 +390,6 @@ body {
   border-color: #3b82f6;
 }
 
-/* Meta info mejorado */
 .meta {
   display: flex;
   justify-content: space-between;
@@ -396,7 +398,6 @@ body {
   margin-bottom: 12px;
   font-weight: 600;
   padding: 8px 0;
-  border-top: 1px solid #f1f5f9;
 }
 
 .meta span {
@@ -725,16 +726,16 @@ body.dark-mode .card-info p {
   color: #9ca3af;
 }
 
-/* Tags modo oscuro */
-body.dark-mode .tags span,
-body.dark-mode .tag {
+/* cada_generos modo oscuro */
+body.dark-mode .cada_generos span,
+body.dark-mode .cada_genero {
   background: rgba(45, 40, 94, 0.4);
   border-color: rgba(45, 40, 94, 0.6);
   color: #a78bfa;
 }
 
-body.dark-mode .tags span:hover,
-body.dark-mode .tag:hover {
+body.dark-mode .cada_generos span:hover,
+body.dark-mode .cada_genero:hover {
   background: rgba(45, 40, 94, 0.6);
   color: #c4b5fd;
   border-color: #2D285E;
@@ -744,7 +745,6 @@ body.dark-mode .tag:hover {
 /* Meta modo oscuro */
 body.dark-mode .meta {
   color: #9ca3af;
-  border-top-color: rgba(45, 40, 94, 0.4);
 }
 
 body.dark-mode .meta span {
@@ -845,28 +845,30 @@ body.dark-mode .heart-btn.liked .heart-icon {
 /* ===== MODAL DE MANGA ===== */
 .modalManga {
   position: fixed;
-  inset: 0; /* top, right, bottom, left: 0 */
-  background: rgba(0, 0, 0, 0.6);
-  display: none; /* oculto por defecto */
+  inset: 0;
+  background: rgba(0, 0, 0, 0.9);
+  display: none;
   justify-content: center;
   align-items: center;
   z-index: 1000;
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(8px);
 }
 
 /* Contenedor del contenido del modal */
 .modalManga section {
-  background: var(--color-fondo, #ffffff);
-  color: var(--color-texto, #1e293b);
-  border-radius: 20px;
-  max-width: 600px;
+  background: #0a0a0f;
+  color: #ffffff;
+  border-radius: 12px;
+  max-width: 650px;
   width: 90%;
-  padding: 2rem;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8);
   transform: scale(0.95);
   opacity: 0;
   transition: all 0.3s ease;
-  font-family: 'Joti One', sans-serif;
+  position: relative;
+  border: 1px solid rgba(104, 49, 102, 0.15);
 }
 
 /* cuando el modal está visible */
@@ -875,30 +877,452 @@ body.dark-mode .heart-btn.liked .heart-icon {
   opacity: 1;
 }
 
-/* Botón cerrar */
+/* Contenido del modal */
+.modal-content {
+  padding: 0;
+}
+
+/* Botón cerrar mejorado */
 .cerrarModal {
-  background: #e0245e;
-  color: #fff;
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
   border: none;
-  border-radius: 8px;
-  padding: 0.5rem 1rem;
-  font-weight: bold;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  transition: background 0.2s ease;
-  margin-top: 1rem;
+  z-index: 10;
 }
 
 .cerrarModal:hover {
-  background: #b91c46;
+  background: rgba(104, 49, 102, 0.3);
 }
 
-/* Pequeños ajustes de texto */
-.modalManga h2 {
-  font-size: 1.8rem;
-  margin-bottom: 0.5rem;
+/* Header principal con imagen y título */
+.modal-header-main {
+  background: #0a0a0f;
+  padding: 24px;
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  border-radius: 12px 12px 0 0;
+  border-bottom: 1px solid rgba(104, 49, 102, 0.2);
 }
 
-.modalManga p {
-  margin: 0.4rem 0;
+.modal-image-container {
+  flex-shrink: 0;
+  width: 110px;
+  height: 155px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  border: 2px solid rgba(104, 49, 102, 0.3);
+}
+
+.modal-image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.modal-info-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.modal-info-container h2 {
+  font-size: 1.5rem;
+  margin: 0;
+  color: #ffffff;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.modal-estado {
+  display: flex;
+  align-items: center;
+}
+
+.estado-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(76, 175, 80, 0.15);
+  color: #4caf50;
+  padding: 5px 12px;
+  border-radius: 16px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border: 1px solid rgba(76, 175, 80, 0.3);
+}
+
+.estado-badge::before {
+  content: "●";
   font-size: 1rem;
+  animation: pulse 2s infinite;
 }
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* sinopsis */
+.modal-sinopsis-section {
+  padding: 1.25rem 1.5rem;
+  background: #0a0a0f;
+  border-top: 1px solid rgba(104, 49, 102, 0.1);
+}
+
+.modal-sinopsis-section h3 {
+  font-size: 1.05rem;
+  margin: 0 0 0.6rem 0;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.modal-sinopsis-section p {
+  margin: 0;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+}
+
+/*  géneros */
+.modal-generos-section {
+  padding: 1.25rem 1.5rem;
+  background: #0a0a0f;
+  border-top: 1px solid rgba(104, 49, 102, 0.1);
+}
+
+.modal-generos-section h3 {
+  font-size: 1.05rem;
+  margin: 0 0 0.75rem 0;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.generos-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.genero-pill {
+  background: rgba(104, 49, 102, 0.25);
+  color: #ffffff;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  border: 1px solid rgba(104, 49, 102, 0.35);
+  transition: all 0.2s ease;
+  cursor: default;
+}
+
+.genero-pill:hover {
+  background: rgba(104, 49, 102, 0.4);
+  border-color: #683166;
+}
+
+/* Sección de episodios */
+.modal-episodios-section {
+  padding: 20px 24px 24px;
+  background: #0a0a0f;
+  border-top: 1px solid rgba(104, 49, 102, 0.1);
+}
+
+.episodios-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: rgba(104, 49, 102, 0.15);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: 12px;
+  border: 1px solid rgba(104, 49, 102, 0.25);
+}
+
+.episodios-header:hover {
+  background: rgba(104, 49, 102, 0.25);
+  border-color: rgba(104, 49, 102, 0.4);
+}
+
+.episodios-header h3 {
+  margin: 0;
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.toggle-episodios {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toggle-episodios .chevron-icon {
+  color: #ffffff;
+  transition: transform 0.3s ease;
+}
+
+.toggle-episodios .chevron-icon.rotated {
+  transform: rotate(180deg);
+}
+
+/* Lista de volúmenes */
+.volumenes-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+/* Item de volumen (acordeón) */
+.volumen-item {
+  background: rgba(104, 49, 102, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(104, 49, 102, 0.25);
+  transition: all 0.3s ease;
+}
+
+.volumen-item:hover {
+  border-color: #683166;
+  box-shadow: 0 2px 8px rgba(104, 49, 102, 0.25);
+}
+
+/* Header del volumen (clickeable) */
+.volumen-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  cursor: pointer;
+  background: rgba(104, 49, 102, 0.08);
+  transition: background 0.2s ease;
+}
+
+.volumen-header:hover {
+  background: rgba(104, 49, 102, 0.15);
+}
+
+.volumen-header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex: 1;
+}
+
+.volumen-titulo {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+/* Botón de visto */
+.btn-visto {
+  background: rgba(104, 49, 102, 0.25);
+  border: 1px solid rgba(104, 49, 102, 0.4);
+  border-radius: 6px;
+  padding: 6px 11px;
+  color: #ffffff;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.btn-visto:hover {
+  background: rgba(104, 49, 102, 0.4);
+  border-color: #683166;
+}
+
+.btn-visto.visto {
+  background: #683166;
+  border-color: #7d3d7a;
+}
+
+.btn-visto svg {
+  width: 14px;
+  height: 14px;
+}
+
+.volumen-header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* Ícono chevron */
+.chevron-icon {
+  transition: transform 0.3s ease;
+  color: #ffffff;
+}
+
+.chevron-icon.rotated {
+  transform: rotate(180deg);
+}
+
+/* Lista de capítulos (desplegable) */
+.capitulos-lista {
+  background: rgba(0, 0, 0, 0.3);
+  border-top: 1px solid rgba(104, 49, 102, 0.25);
+}
+
+/* Item de capítulo */
+.capitulo-item {
+  padding: 10px 16px;
+  border-bottom: 1px solid rgba(104, 49, 102, 0.15);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  background: transparent;
+}
+
+.capitulo-item:last-child {
+  border-bottom: none;
+}
+
+.capitulo-item:hover {
+  background: rgba(104, 49, 102, 0.15);
+  padding-left: 20px;
+}
+
+.capitulo-item span {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Scrollbar personalizada para el modal */
+.modalManga section::-webkit-scrollbar {
+  width: 6px;
+}
+
+.modalManga section::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.modalManga section::-webkit-scrollbar-thumb {
+  background: rgba(104, 49, 102, 0.5);
+  border-radius: 3px;
+}
+
+.modalManga section::-webkit-scrollbar-thumb:hover {
+  background: rgba(104, 49, 102, 0.7);
+}
+
+/* ===== MODAL DE PERFIL ===== */
+.modal-perfil {
+  position: absolute;
+  top: 70px;
+  right: 20px;
+  background: #0a0a0f;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(104, 49, 102, 0.3);
+  z-index: 1000;
+  min-width: 200px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+}
+
+.modal-perfil.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.modal-perfil-content {
+  padding: 8px 0;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.menu-item:hover {
+  background: rgba(104, 49, 102, 0.2);
+}
+
+.menu-item svg {
+  flex-shrink: 0;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.menu-item:hover svg {
+  color: #683166;
+}
+
+.menu-item.logout {
+  color: #ff4757;
+}
+
+.menu-item.logout svg {
+  color: #ff4757;
+}
+
+.menu-item.logout:hover {
+  background: rgba(255, 71, 87, 0.1);
+}
+
+.separator {
+  height: 1px;
+  background: rgba(104, 49, 102, 0.2);
+  margin: 0.5rem 0;
+}
+
+/* Responsive para el modal */
+@media (max-width: 600px) {
+  .modal-header-main {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .modal-image-container {
+    width: 100px;
+    height: 140px;
+  }
+  
+  .modal-info-container h2 {
+    font-size: 1.3rem;
+  }
+  
+  .modal-sinopsis-section,
+  .modal-generos-section,
+  .modal-episodios-section {
+    padding: 16px 20px;
+  }
+}
+
+
+

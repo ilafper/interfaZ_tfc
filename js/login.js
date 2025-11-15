@@ -26,8 +26,9 @@ $(document).ready(function () {
                 contentType: 'application/json',
                 data: JSON.stringify({ nombre, password })
             });
-
-            alert(response.mensaje);
+            // Guardar datos del usuario en localStorage
+            localStorage.setItem('usuario', JSON.stringify(response.usuario));
+            //alert(response.mensaje);
             window.location.href = "../html/home.html";
 
         } catch (error) {
