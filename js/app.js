@@ -380,6 +380,5 @@ $(document).ready(function () {
     console.log('ID del manga:', mangaId);
   });
 
-
-
+  
 });
