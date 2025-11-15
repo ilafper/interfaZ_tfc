@@ -45,20 +45,6 @@ $(document).ready(function () {
     window.location.href = "../html/login.html";
   });
 
-
-  if (usuario.lista_Fav && usuario.lista_Fav.includes(manga._id)) {
-    tarjeta.find('.heart-btn').addClass('liked');
-    tarjeta.find('.heart-icon').attr('fill', '#e0245e');
-  }
-
-
-
-
-
-
-
-
-
   //carga los mangas 
   function cargarMangas() {
     $.ajax({
@@ -109,10 +95,10 @@ $(document).ready(function () {
           `);
 
           // // Marcar favoritos si el usuario ya los tiene
-          // if (usuario && usuario.lista_Fav && usuario.lista_Fav.includes(manga._id)) {
-          //   tarjeta.find('.heart-btn').addClass('liked');
-          //   tarjeta.find('.heart-icon').attr('fill', '#e0245e');
-          // }
+          if (usuario && usuario.lista_Fav && usuario.lista_Fav.includes(manga._id)) {
+            tarjeta.find('.heart-btn').addClass('liked');
+            tarjeta.find('.heart-icon').attr('fill', '#e0245e');
+          }
 
           contenedor.append(tarjeta);
         });
@@ -374,6 +360,8 @@ $(document).ready(function () {
     const $btn = $(this);
     const mangaId = $btn.data('id');
     const usuario = JSON.parse(localStorage.getItem('usuario'));
+    console.log("manga a gustar:  "+mangaId);
+    
     if (!usuario) return alert('Debes iniciar sesión');
 
     try {
