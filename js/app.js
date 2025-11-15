@@ -2,20 +2,20 @@
 $(document).ready(function () {
 
   // Modal de perfil
-  $('#avatarBtn').on('click', function(e) {
+  $('#avatarBtn').on('click', function (e) {
     e.stopPropagation();
     $('#modalPerfil').toggleClass('show');
   });
 
   // Cerrar modal de perfil al hacer clic fuera
-  $(document).on('click', function(e) {
+  $(document).on('click', function (e) {
     if (!$(e.target).closest('#avatarBtn, #modalPerfil').length) {
       $('#modalPerfil').removeClass('show');
     }
   });
 
   // Evitar que el modal se cierre al hacer clic dentro
-  $('#modalPerfil').on('click', function(e) {
+  $('#modalPerfil').on('click', function (e) {
     e.stopPropagation();
   });
 
@@ -29,7 +29,7 @@ $(document).ready(function () {
   // 💾 "Guardar" → tampoco abre modal
   $('.cartasWrap').on('click', '.guardar', function (e) {
     e.stopPropagation();
-    
+
 
   });
 
@@ -39,11 +39,25 @@ $(document).ready(function () {
     $('#nombreUsuario').text(usuario.nombre);
   }
 
-    // Cerrar sesión con jQuery
-  $('.logout').click(function() {
-      localStorage.removeItem('usuario');
-      window.location.href = "../html/login.html";
+  // Cerrar sesión con jQuery
+  $('.logout').click(function () {
+    localStorage.removeItem('usuario');
+    window.location.href = "../html/login.html";
   });
+
+
+  if (usuario.lista_Fav && usuario.lista_Fav.includes(manga._id)) {
+    tarjeta.find('.heart-btn').addClass('liked');
+    tarjeta.find('.heart-icon').attr('fill', '#e0245e');
+  }
+
+
+
+
+
+
+
+
 
   //carga los mangas 
   function cargarMangas() {
@@ -164,12 +178,12 @@ $(document).ready(function () {
     for (let i = 0; i < mangas.length; i++) {
       const manga = mangas[i];
       const generos = manga.genero;
-      
+
       let tags = '';
       for (let j = 0; j < 2 && j < generos.length; j++) {
         tags += `<span class="tag">${generos[j]}</span>`;
       }
-      
+
       const extraTag = generos.length > 2 ? `<span class="tag">+${generos.length - 2}</span>` : '';
 
       const tarjeta = $(`
@@ -225,17 +239,17 @@ $(document).ready(function () {
 
     // imagen
     $('#modal-manga-image').attr('src', '../src/frieren.png').attr('alt', manga.nombre);
-    
+
     // Rellenar título
     $('#modal-manga-titulo').text(manga.nombre);
-    
+
     // Rellenar estado
     $('#modal-manga-estado').text('En emisión');
-    
+
     // Rellenar sinopsis (si existe en los datos)
     const sinopsis = manga.sinopsis || 'Una historia épica de piratas, donde narra la historia de "Monkey D. Luffy" quien cuando tenia 7 años, comió accidentalmente una "Akuma no mi"(Futa del diablo) la cual le dio poderes de goma.';
     $('#modal-manga-sinopsis').text(sinopsis);
-    
+
     // Rellenar géneros
     const generos = manga.genero || [];
     let generosHTML = '';
@@ -248,17 +262,17 @@ $(document).ready(function () {
     let volumenesHTML = '';
     const temporadas = manga.temporadas || [];
     const totalCapitulos = manga.capitulos || 0;
-    
+
     // Actualizar título de episodios
     $('#modal-episodios-titulo').text(`Episodios del 1 al ${totalCapitulos}`);
-    
+
     // Recorrer las temporadas (tomos) del manga
     if (temporadas.length > 0) {
       for (let i = 0; i < temporadas.length; i++) {
         const temporada = temporadas[i];
         const tomoNum = temporada.tomo;
         const capsDelTomo = temporada.capitulos || [];
-        
+
         let capitulosHTML = '';
         // Recorrer los capítulos de este tomo
         for (let j = 0; j < capsDelTomo.length; j++) {
@@ -269,7 +283,7 @@ $(document).ready(function () {
             </div>
           `;
         }
-        
+
         volumenesHTML += `
           <div class="volumen-item">
             <div class="volumen-header">
@@ -306,7 +320,7 @@ $(document).ready(function () {
     e.stopPropagation();
     const $volumenes = $('#modal-volumenes-lista');
     const $chevron = $(this).find('.chevron-icon');
-    
+
     $volumenes.slideToggle(300);
     $chevron.toggleClass('rotated');
   });
@@ -317,11 +331,11 @@ $(document).ready(function () {
     if ($(e.target).closest('.btn-visto').length) {
       return;
     }
-    
+
     const $this = $(this);
     const $capitulos = $this.next('.capitulos-lista');
     const $chevron = $this.find('.chevron-icon');
-    
+
     $capitulos.slideToggle(300);
     $chevron.toggleClass('rotated');
   });
@@ -330,10 +344,10 @@ $(document).ready(function () {
   $('.modalManga').on('click', '.btn-visto', function (e) {
     e.stopPropagation();
     $(this).toggleClass('visto');
-    
+
     const tomoNum = $(this).data('tomo');
     const isVisto = $(this).hasClass('visto');
-    
+
     // Cambiar el texto del botón
     if (isVisto) {
       $(this).find('span').text('Visto');
@@ -360,42 +374,11 @@ $(document).ready(function () {
 
   //fUNCIONLAIDAD MANGA GUSTADO
 
-  $('.heart-btn').click(async function() {
-     const mangaId = $(this).data('id'); // obtenemos el id del manga
-     console.log(mangaId);
-     
-    
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  $('.cartasWrap').on('click', '.heart-btn', function (e) {
+    e.stopPropagation();
+    const mangaId = $(this).data('id'); // ahora sí funcionará
+    console.log('ID del manga:', mangaId);
+  });
 
 
 
