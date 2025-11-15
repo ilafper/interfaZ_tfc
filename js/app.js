@@ -36,9 +36,14 @@ $(document).ready(function () {
   const usuario = JSON.parse(localStorage.getItem('usuario'));
 
   if (usuario) {
-      document.getElementById('nombreUsuario').textContent = usuario.nombre;
-      document.getElementById('emailUsuario').textContent = usuario.email;
+    $('#nombreUsuario').text(usuario.nombre);
   }
+
+    // Cerrar sesión con jQuery
+  $('.logout').click(function() {
+      localStorage.removeItem('usuario');
+      window.location.href = "../html/login.html";
+  });
 
   //carga los mangas 
   function cargarMangas() {
