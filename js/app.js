@@ -67,69 +67,63 @@ $(document).ready(function () {
       success: function (mangas) {
         const contenedor = $('.cartasWrap');
         contenedor.empty();
-        //recorrer los manngass
 
-        for (let i = 0; i < mangas.length; i++) {
-          const manga = mangas[i];
-
-          //console.log(manga);
-
+        mangas.forEach(function (manga) {
           const generos = manga.genero || [];
-          //añadir los generos del manga.
+
           let tags = '';
-
-
           for (let j = 0; j < 2 && j < generos.length; j++) {
             tags += `<span class="cada_genero">${generos[j]}</span>`;
           }
-
-          // si hay mas, añadir el numero del los que halla
-          //maximo 2
           const extraTag = generos.length > 2 ? `<span class="cada_genero">+${generos.length - 2}</span>` : '';
-          // meter los datos del manga en la tarjeta, para que cuando se abra el modal cargarlo.
+
           const tarjeta = $(`
-            
-          <div class="card" data-manga='${JSON.stringify(manga)}'>
-                    <img src="../src/frieren.png"  alt="${manga.nombre}>
-                    <div class="card-info">
-                        <h3>${manga.nombre}</h3>
-                        <p>por ${manga.autor}</p>
-                        <div class="generos">
-                          ${tags}
-                          ${extraTag}
-                        </div>
-                        <div class="meta">
-                            <span>${manga.volumenes} volúmenes</span>
-                            <span>${manga.capitulos} capítulos</span>
-                        </div>
-                        <div class="interactions">
-                            <button class="heart-btn" data-id="${manga._id}" aria-label="Me gusta">
-                                <svg class="heart-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#e0245e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M12 21C12 21 5 14.5 5 9.5C5 6.42 7.42 4 10.5 4C12 4 13.5 5 14 6C14.5 5 16 4 17.5 4C20.58 4 23 6.42 23 9.5C23 14.5 16 21 16 21H12Z"/>
-                                </svg>
-                                <p>Me gusta</p>
-                            </button>
-
-                            <button class="guardar" aria-label="guardar">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#ffffff" d="M5 21h14a2 2 0 0 0 2-2V8l-5-5H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2zM7 5h4v2h2V5h2v4H7V5zm0 8h10v6H7v-6z"/></svg>
-                            <p>Guardar</p>
-                            </button>
-                        </div>
-                    </div>
+            <div class="card" data-manga='${JSON.stringify(manga)}'>
+              <img src="../src/frieren.png" alt="${manga.nombre}">
+              <div class="card-info">
+                <h3>${manga.nombre}</h3>
+                <p>por ${manga.autor}</p>
+                <div class="generos">
+                  ${tags}${extraTag}
                 </div>
-        `);
+                <div class="meta">
+                  <span>${manga.volumenes} volúmenes</span>
+                  <span>${manga.capitulos} capítulos</span>
+                </div>
+                <div class="interactions">
+                  <button class="heart-btn" data-id="${manga._id}" aria-label="Me gusta">
+                    <svg class="heart-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#e0245e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M12 21C12 21 5 14.5 5 9.5C5 6.42 7.42 4 10.5 4C12 4 13.5 5 14 6C14.5 5 16 4 17.5 4C20.58 4 23 6.42 23 9.5C23 14.5 16 21 16 21H12Z"/>
+                    </svg>
+                    <p>Me gusta</p>
+                  </button>
+                  <button class="guardar" aria-label="guardar">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                      <path fill="#ffffff" d="M5 21h14a2 2 0 0 0 2-2V8l-5-5H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2zM7 5h4v2h2V5h2v4H7V5zm0 8h10v6H7v-6z"/>
+                    </svg>
+                    <p>Guardar</p>
+                  </button>
+                </div>
+              </div>
+            </div>
+          `);
 
+          // // Marcar favoritos si el usuario ya los tiene
+          // if (usuario && usuario.lista_Fav && usuario.lista_Fav.includes(manga._id)) {
+          //   tarjeta.find('.heart-btn').addClass('liked');
+          //   tarjeta.find('.heart-icon').attr('fill', '#e0245e');
+          // }
 
-          console.log(manga);
-
-          // Añadir targeta
           contenedor.append(tarjeta);
-        }
-
-
+        });
       },
+      error: function (err) {
+        console.error("Error al cargar mangas:", err);
+        $('.cartasWrap').html("<p style='text-align:center; color:#64748b;'>No se pudieron cargar los mangas. Intenta de nuevo.</p>");
+      }
     });
   }
+
 
   cargarMangas();
 
@@ -374,11 +368,37 @@ $(document).ready(function () {
 
   //fUNCIONLAIDAD MANGA GUSTADO
 
-  $('.cartasWrap').on('click', '.heart-btn', function (e) {
+  $('.cartasWrap').on('click', '.heart-btn', async function (e) {
     e.stopPropagation();
-    const mangaId = $(this).data('id'); // ahora sí funcionará
-    console.log('ID del manga:', mangaId);
+
+    const $btn = $(this);
+    const mangaId = $btn.data('id');
+    const usuario = JSON.parse(localStorage.getItem('usuario'));
+    if (!usuario) return alert('Debes iniciar sesión');
+
+    try {
+      const res = await fetch('https://api-tfc-five.vercel.app/api/gustarManga', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ usuarioId: usuario._id, mangaId })
+      });
+      const data = await res.json();
+
+      // Actualizar toggle visual según si está en lista_Fav
+      const isLiked = data.lista_Fav.includes(mangaId);
+      $btn.toggleClass('liked', isLiked);
+      $btn.find('.heart-icon').attr('fill', isLiked ? '#e0245e' : 'none');
+
+      // Actualizar usuario en localStorage
+      usuario.lista_Fav = data.lista_Fav;
+      localStorage.setItem('usuario', JSON.stringify(usuario));
+
+    } catch (err) {
+      console.error('Error al actualizar favoritos:', err);
+    }
   });
 
-  
+
+
+
 });
