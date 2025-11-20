@@ -95,7 +95,7 @@ $(document).ready(function () {
           `);
 
           // // Marcar favoritos si el usuario ya los tiene
-          if (usuario && usuario.lista_Fav && usuario.lista_Fav.includes(manga._id)) {
+          if (usuario && usuario.lista_Fav && usuario.lista_Fav.some(fav => fav._id === manga._id)) {
             tarjeta.find('.heart-btn').addClass('liked');
             tarjeta.find('.heart-icon').attr('fill', '#e0245e');
           }
@@ -264,6 +264,11 @@ $(document).ready(function () {
           `;
         }
 
+        // Verificar si este tomo está marcado como visto
+        const tomoVisto = usuario && usuario.capitulos_vistos && 
+          usuario.capitulos_vistos.some(cv => cv.mangaId === manga._id && cv.tomo === tomoNum && cv.visto);
+        const claseVisto = tomoVisto ? 'visto' : '';
+
         volumenesHTML += `
           <div class="volumen-item">
             <div class="volumen-header">
@@ -271,7 +276,7 @@ $(document).ready(function () {
                 <span class="volumen-titulo">Tomo ${tomoNum}</span>
               </div>
               <div class="volumen-header-right">
-                <button class="btn-visto" data-tomo="${tomoNum}" onclick="event.stopPropagation()">
+                <button class="btn-visto ${claseVisto}" data-tomo="${tomoNum}" data-manga-id="${manga._id}" onclick="event.stopPropagation()">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
                     <path fill="currentColor" d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5s5 2.24 5 5s-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3s3-1.34 3-3s-1.34-3-3-3z"/>
                   </svg>
@@ -321,21 +326,42 @@ $(document).ready(function () {
   });
 
   // Toggle botón de visto
-  $('.modalManga').on('click', '.btn-visto', function (e) {
+  $('.modalManga').on('click', '.btn-visto', async function (e) {
     e.stopPropagation();
-    $(this).toggleClass('visto');
+    
+    const $btn = $(this);
+    const tomoNum = $btn.data('tomo');
+    const mangaId = $btn.data('manga-id');
+    const usuario = JSON.parse(localStorage.getItem('usuario'));
 
-    const tomoNum = $(this).data('tomo');
-    const isVisto = $(this).hasClass('visto');
+    if (!usuario) return alert('Debes iniciar sesión');
 
-    // Cambiar el texto del botón
-    if (isVisto) {
-      $(this).find('span').text('Visto');
-      console.log(`Tomo ${tomoNum} marcado como visto`);
-      // Aquí puedes guardar el estado en localStorage o base de datos
-    } else {
-      $(this).find('span').text('Visto');
-      console.log(`Tomo ${tomoNum} desmarcado`);
+    $btn.toggleClass('visto');
+    const isVisto = $btn.hasClass('visto');
+
+    try {
+      // Enviar actualización a la base de datos
+      const res = await fetch('https://api-tfc-five.vercel.app/api/marcarCapituloVisto', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          usuarioId: usuario._id, 
+          mangaId: mangaId,
+          tomo: tomoNum,
+          visto: isVisto
+        })
+      });
+      const data = await res.json();
+
+      // Actualizar usuario en localStorage
+      usuario.capitulos_vistos = data.capitulos_vistos;
+      localStorage.setItem('usuario', JSON.stringify(usuario));
+
+      console.log(`Tomo ${tomoNum} ${isVisto ? 'marcado' : 'desmarcado'} como visto`);
+    } catch (err) {
+      console.error('Error al actualizar capítulo visto:', err);
+      // Revertir el cambio visual si hay error
+      $btn.toggleClass('visto');
     }
   });
 
@@ -364,21 +390,26 @@ $(document).ready(function () {
     
     if (!usuario) return alert('Debes iniciar sesión');
 
+    // Obtener el objeto completo del manga
+    const $card = $btn.closest('.card');
+    const mangaCompleto = JSON.parse($card.attr('data-manga'));
+
     try {
       const res = await fetch('https://api-tfc-five.vercel.app/api/gustarManga', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ usuarioId: usuario._id, mangaId })
+        body: JSON.stringify({ usuarioId: usuario._id, manga: mangaCompleto })
       });
       const data = await res.json();
 
       // Actualizar toggle visual según si está en lista_Fav
-      const isLiked = data.lista_Fav.includes(mangaId);
+      const isLiked = data.lista_Fav.some(fav => fav._id === mangaId);
       $btn.toggleClass('liked', isLiked);
       $btn.find('.heart-icon').attr('fill', isLiked ? '#e0245e' : 'none');
 
       // Actualizar usuario en localStorage
       usuario.lista_Fav = data.lista_Fav;
+      usuario.capitulos_vistos = data.capitulos_vistos || [];
       localStorage.setItem('usuario', JSON.stringify(usuario));
 
     } catch (err) {
