@@ -329,13 +329,13 @@ $(document).ready(function () {
     $chevron.toggleClass('rotated');
   });
 
-  // TEST: Verificar que el evento está registrado
-  console.log('🔧 Evento .btn-visto registrado');
+  
+  
 
   // Toggle botón de visto
   $('.modalManga').on('click', '.btn-visto', async function (e) {
     e.stopPropagation();
-    console.log('🔍 Click en botón visto detectado');
+    console.log('Sisi visto');
     
     const $btn = $(this);
     const tomoNum = $btn.data('tomo');
@@ -345,12 +345,12 @@ $(document).ready(function () {
     const usuario = JSON.parse(localStorage.getItem('usuario'));
 
     if (!usuario) {
-      console.error('❌ No hay usuario en sesión');
-      return alert('Debes iniciar sesión');
+      console.error('Inicia sesion');
+      //return alert('Debes iniciar sesión');
     }
 
-    console.log('👤 Usuario:', usuario.nombre);
-    console.log('🔄 Estado ANTES:', $btn.hasClass('visto') ? 'visto' : 'no visto');
+    console.log('Usuario:', usuario.nombre);
+    console.log("Estado ANTES:", $btn.hasClass('visto') ? 'visto' : 'no visto');
 
     $btn.toggleClass('visto');
     const isVisto = $btn.hasClass('visto');
@@ -361,15 +361,15 @@ $(document).ready(function () {
     const iconoOjoNormal = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5s5 2.24 5 5s-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3s3-1.34 3-3s-1.34-3-3-3z"/></svg>`;
     const iconoOjoTachado = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M12 7c2.76 0 5 2.24 5 5c0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.75c-1.73-4.39-6-7.5-11-7.5c-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28l.46.46A11.804 11.804 0 0 0 1 12c1.73 4.39 6 7.5 11 7.5c1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22L21 20.73L3.27 3L2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65c0 1.66 1.34 3 3 3c.22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53c-2.76 0-5-2.24-5-5c0-.79.2-1.53.53-2.2zm4.31-.78l3.15 3.15l.02-.16c0-1.66-1.34-3-3-3l-.17.01z"/></svg>`;
     
-    console.log('🎨 Cambiando icono a:', isVisto ? 'OJO NORMAL' : 'OJO TACHADO');
+    //reemplazar icono ojo
     $btn.find('svg').replaceWith(isVisto ? iconoOjoNormal : iconoOjoTachado);
 
     try {
       // Enviar actualización a la base de datos
-      console.log('📡 Enviando petición a API...');
-      console.log('📦 Body:', { usuarioId: usuario._id, mangaId, tomo: tomoNum, visto: isVisto });
       
-      const res = await fetch('https://api-tfc-five.vercel.app/api/marcarCapituloVisto', {
+      console.log('datos', { usuarioId: usuario._id, mangaId, tomo: tomoNum, visto: isVisto });
+      
+      const res = await ajax('https://api-tfc-five.vercel.app/api/marcarCapituloVisto', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
@@ -380,24 +380,24 @@ $(document).ready(function () {
         })
       });
       
-      console.log('📥 Respuesta status:', res.status);
+      console.log("Respuesta status:", res.status);
       
       if (!res.ok) {
         const errorText = await res.text();
-        console.error('❌ Error del servidor:', errorText);
+        console.error('Error del servidor:', errorText);
         throw new Error(`Error ${res.status}: ${res.statusText}`);
       }
       
       const data = await res.json();
-      console.log('✅ Respuesta del servidor:', data);
+      console.log('Respuesta del servidor:', data);
 
       // Actualizar usuario en localStorage
       usuario.capitulos_vistos = data.capitulos_vistos;
       localStorage.setItem('usuario', JSON.stringify(usuario));
 
-      console.log(`✅ Tomo ${tomoNum} ${isVisto ? 'marcado' : 'desmarcado'} como visto`);
+      console.log(`Tomo ${tomoNum} ${isVisto ? 'marcado' : 'desmarcado'} como visto`);
     } catch (err) {
-      console.error('❌ Error al actualizar capítulo visto:', err);
+      console.error('Error al actualizar capítulo visto:', err);
       // Revertir el cambio visual si hay error
       $btn.toggleClass('visto');
       $btn.find('svg').replaceWith(isVisto ? iconoOjoTachado : iconoOjoNormal);
@@ -435,7 +435,7 @@ $(document).ready(function () {
     const mangaCompleto = JSON.parse($card.attr('data-manga'));
 
     try {
-      const res = await fetch('https://api-tfc-five.vercel.app/api/gustarManga', {
+      const res = await ajax('https://api-tfc-five.vercel.app/api/gustarManga', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ usuarioId: usuario._id, manga: mangaCompleto })
@@ -447,7 +447,7 @@ $(document).ready(function () {
       $btn.toggleClass('liked', isLiked);
       $btn.find('.heart-icon').attr('fill', isLiked ? '#e0245e' : 'none');
 
-      // Actualizar usuario en localStorage
+      // Actualizar datos nuevos.
       usuario.lista_Fav = data.lista_Fav;
       usuario.capitulos_vistos = data.capitulos_vistos || [];
       localStorage.setItem('usuario', JSON.stringify(usuario));
