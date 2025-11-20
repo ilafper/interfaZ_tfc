@@ -422,11 +422,14 @@ $(document).ready(function () {
 
   $('.cartasWrap').on('click', '.heart-btn', async function (e) {
     e.stopPropagation();
-
+    console.log("le diste a me gusta");
+    console.log("sISISS");
     const $btn = $(this);
     const mangaId = $btn.data('id');
+
+
     const usuario = JSON.parse(localStorage.getItem('usuario'));
-    console.log("manga a gustar:  "+mangaId);
+    
     
     if (!usuario) return alert('Debes iniciar sesión');
 
@@ -456,8 +459,5 @@ $(document).ready(function () {
       console.error('Error al actualizar favoritos:', err);
     }
   });
-
-
-
 
 });
