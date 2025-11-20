@@ -1162,6 +1162,15 @@ body.dark-mode .heart-btn.liked .heart-icon {
 .btn-visto svg {
   width: 14px;
   height: 14px;
+  pointer-events: none; /* Asegura que el click se capture en el botón, no en el SVG */
+}
+
+.btn-visto svg path {
+  pointer-events: none; /* También para el path del SVG */
+}
+
+.btn-visto span {
+  pointer-events: none; /* También para el texto */
 }
 
 .volumen-header-right {
