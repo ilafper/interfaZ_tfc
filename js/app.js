@@ -62,7 +62,7 @@ $(document).ready(function () {
             tags += `<span class="cada_genero">${generos[j]}</span>`;
           }
           const extraTag = generos.length > 2 ? `<span class="cada_genero">+${generos.length - 2}</span>` : '';
-
+          //estructura manga
           const tarjeta = $(`
             <div class="card" data-manga='${JSON.stringify(manga)}'>
               <img src="../src/frieren.png" alt="${manga.nombre}">
@@ -95,7 +95,7 @@ $(document).ready(function () {
           `);
 
           // // Marcar favoritos si el usuario ya los tiene
-          if (usuario && usuario.lista_Fav && usuario.lista_Fav.includes(manga._id)) {
+          if (usuario && usuario.lista_Fav && usuario.lista_Fav.some(fav => fav._id === manga._id)) {
             tarjeta.find('.heart-btn').addClass('liked');
             tarjeta.find('.heart-icon').attr('fill', '#e0245e');
           }
@@ -264,6 +264,16 @@ $(document).ready(function () {
           `;
         }
 
+        // Verificar si este tomo está marcado como visto
+        const tomoVisto = usuario && usuario.capitulos_vistos && 
+          usuario.capitulos_vistos.some(cv => cv.mangaId === manga._id && cv.tomo === tomoNum && cv.visto);
+        const claseVisto = tomoVisto ? 'visto' : '';
+        
+        // Icono: ojo tachado (no visto) o ojo normal (visto)
+        const iconoOjo = tomoVisto 
+          ? `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5s5 2.24 5 5s-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3s3-1.34 3-3s-1.34-3-3-3z"/></svg>`
+          : `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M12 7c2.76 0 5 2.24 5 5c0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.75c-1.73-4.39-6-7.5-11-7.5c-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28l.46.46A11.804 11.804 0 0 0 1 12c1.73 4.39 6 7.5 11 7.5c1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22L21 20.73L3.27 3L2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65c0 1.66 1.34 3 3 3c.22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53c-2.76 0-5-2.24-5-5c0-.79.2-1.53.53-2.2zm4.31-.78l3.15 3.15l.02-.16c0-1.66-1.34-3-3-3l-.17.01z"/></svg>`;
+
         volumenesHTML += `
           <div class="volumen-item">
             <div class="volumen-header">
@@ -271,10 +281,8 @@ $(document).ready(function () {
                 <span class="volumen-titulo">Tomo ${tomoNum}</span>
               </div>
               <div class="volumen-header-right">
-                <button class="btn-visto" data-tomo="${tomoNum}" onclick="event.stopPropagation()">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
-                    <path fill="currentColor" d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5s5 2.24 5 5s-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3s3-1.34 3-3s-1.34-3-3-3z"/>
-                  </svg>
+                <button class="btn-visto ${claseVisto}" data-tomo="${tomoNum}" data-manga-id="${manga._id}">
+                  ${iconoOjo}
                   <span>Visto</span>
                 </button>
                 <svg class="chevron-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
@@ -309,6 +317,7 @@ $(document).ready(function () {
   $('.modalManga').on('click', '.volumen-header', function (e) {
     // No expandir si se hizo clic en el botón de visto
     if ($(e.target).closest('.btn-visto').length) {
+      console.log('⏸️ Click en botón visto, no expandir');
       return;
     }
 
@@ -320,22 +329,79 @@ $(document).ready(function () {
     $chevron.toggleClass('rotated');
   });
 
+  
+  
+
   // Toggle botón de visto
-  $('.modalManga').on('click', '.btn-visto', function (e) {
+  $('.modalManga').on('click', '.btn-visto', async function (e) {
     e.stopPropagation();
-    $(this).toggleClass('visto');
+    console.log('Sisi visto');
+    
+    const $btn = $(this);
+    const tomoNum = $btn.data('tomo');
+    const mangaId = $btn.data('manga-id');
+    console.log('📊 Datos:', { tomoNum, mangaId });
+    
+    const usuario = JSON.parse(localStorage.getItem('usuario'));
 
-    const tomoNum = $(this).data('tomo');
-    const isVisto = $(this).hasClass('visto');
+    if (!usuario) {
+      console.error('Inicia sesion');
+      //return alert('Debes iniciar sesión');
+    }
 
-    // Cambiar el texto del botón
-    if (isVisto) {
-      $(this).find('span').text('Visto');
-      console.log(`Tomo ${tomoNum} marcado como visto`);
-      // Aquí puedes guardar el estado en localStorage o base de datos
-    } else {
-      $(this).find('span').text('Visto');
-      console.log(`Tomo ${tomoNum} desmarcado`);
+    console.log('Usuario:', usuario.nombre);
+    console.log("Estado ANTES:", $btn.hasClass('visto') ? 'visto' : 'no visto');
+
+    $btn.toggleClass('visto');
+    const isVisto = $btn.hasClass('visto');
+    
+    console.log('🔄 Estado DESPUÉS:', isVisto ? 'visto' : 'no visto');
+
+    // Cambiar el icono según el estado
+    const iconoOjoNormal = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5s5 2.24 5 5s-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3s3-1.34 3-3s-1.34-3-3-3z"/></svg>`;
+    const iconoOjoTachado = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M12 7c2.76 0 5 2.24 5 5c0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.75c-1.73-4.39-6-7.5-11-7.5c-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28l.46.46A11.804 11.804 0 0 0 1 12c1.73 4.39 6 7.5 11 7.5c1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22L21 20.73L3.27 3L2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65c0 1.66 1.34 3 3 3c.22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53c-2.76 0-5-2.24-5-5c0-.79.2-1.53.53-2.2zm4.31-.78l3.15 3.15l.02-.16c0-1.66-1.34-3-3-3l-.17.01z"/></svg>`;
+    
+    //reemplazar icono ojo
+    $btn.find('svg').replaceWith(isVisto ? iconoOjoNormal : iconoOjoTachado);
+
+    try {
+      // Enviar actualización a la base de datos
+      
+      console.log('datos', { usuarioId: usuario._id, mangaId, tomo: tomoNum, visto: isVisto });
+      
+      const res = await ajax('https://api-tfc-five.vercel.app/api/marcarCapituloVisto', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          usuarioId: usuario._id, 
+          mangaId: mangaId,
+          tomo: tomoNum,
+          visto: isVisto
+        })
+      });
+      
+      console.log("Respuesta status:", res.status);
+      
+      if (!res.ok) {
+        const errorText = await res.text();
+        console.error('Error del servidor:', errorText);
+        throw new Error(`Error ${res.status}: ${res.statusText}`);
+      }
+      
+      const data = await res.json();
+      console.log('Respuesta del servidor:', data);
+
+      // Actualizar usuario en localStorage
+      usuario.capitulos_vistos = data.capitulos_vistos;
+      localStorage.setItem('usuario', JSON.stringify(usuario));
+
+      console.log(`Tomo ${tomoNum} ${isVisto ? 'marcado' : 'desmarcado'} como visto`);
+    } catch (err) {
+      console.error('Error al actualizar capítulo visto:', err);
+      // Revertir el cambio visual si hay error
+      $btn.toggleClass('visto');
+      $btn.find('svg').replaceWith(isVisto ? iconoOjoTachado : iconoOjoNormal);
+      alert('Error al actualizar. Verifica que el endpoint /api/marcarCapituloVisto exista en tu API.');
     }
   });
 
@@ -356,37 +422,42 @@ $(document).ready(function () {
 
   $('.cartasWrap').on('click', '.heart-btn', async function (e) {
     e.stopPropagation();
-
+    console.log("le diste a me gusta");
+    console.log("sISISS");
     const $btn = $(this);
     const mangaId = $btn.data('id');
+
+
     const usuario = JSON.parse(localStorage.getItem('usuario'));
-    console.log("manga a gustar:  "+mangaId);
+    
     
     if (!usuario) return alert('Debes iniciar sesión');
 
+    // Obtener el objeto completo del manga
+    const $card = $btn.closest('.card');
+    const mangaCompleto = JSON.parse($card.attr('data-manga'));
+
     try {
-      const res = await fetch('https://api-tfc-five.vercel.app/api/gustarManga', {
+      const res = await ajax('https://api-tfc-five.vercel.app/api/gustarManga', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ usuarioId: usuario._id, mangaId })
+        body: JSON.stringify({ usuarioId: usuario._id, manga: mangaCompleto })
       });
       const data = await res.json();
 
       // Actualizar toggle visual según si está en lista_Fav
-      const isLiked = data.lista_Fav.includes(mangaId);
+      const isLiked = data.lista_Fav.some(fav => fav._id === mangaId);
       $btn.toggleClass('liked', isLiked);
       $btn.find('.heart-icon').attr('fill', isLiked ? '#e0245e' : 'none');
 
-      // Actualizar usuario en localStorage
+      // Actualizar datos nuevos.
       usuario.lista_Fav = data.lista_Fav;
+      usuario.capitulos_vistos = data.capitulos_vistos || [];
       localStorage.setItem('usuario', JSON.stringify(usuario));
 
     } catch (err) {
       console.error('Error al actualizar favoritos:', err);
     }
   });
-
-
-
 
 });
