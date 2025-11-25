@@ -14,11 +14,7 @@ $(document).ready(function () {
         let nombre = $('#username').val().trim();
         let password = $('#password').val().trim();
 
-        if (!nombre || !password) {
-            alert("Por favor, completa todos los campos.");
-            return;
-        }
-
+        
         try {
             const response = await $.ajax({
                 type: 'POST',
@@ -26,10 +22,14 @@ $(document).ready(function () {
                 contentType: 'application/json',
                 data: JSON.stringify({ nombre, password })
             });
+            console.log("caracola");
+            
+            console.log(response.usuario.nombre);
+            
             // Guardar datos del usuario en localStorage
             localStorage.setItem('usuario', JSON.stringify(response.usuario));
             //alert(response.mensaje);
-            window.location.href = "../html/home.html";
+            
 
         } catch (error) {
             if (error.status === 401) {
