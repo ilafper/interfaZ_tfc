@@ -7,6 +7,8 @@ function cambiar(formId) {
     document.querySelector(`.tab[onclick*="${formId}"]`).classList.add('active');
 }
 
+
+
 $(document).ready(function () {
     $('.checklogin').click(async function (e) {
         e.preventDefault();
@@ -14,7 +16,6 @@ $(document).ready(function () {
         let nombre = $('#username').val().trim();
         let password = $('#password').val().trim();
 
-        
         try {
             const response = await $.ajax({
                 type: 'POST',
@@ -23,14 +24,11 @@ $(document).ready(function () {
                 data: JSON.stringify({ nombre, password })
             });
             console.log("caracola");
-            
             console.log(response.usuario.nombre);
             
             // Guardar datos del usuario en localStorage
             localStorage.setItem('usuario', JSON.stringify(response.usuario));
             //alert(response.mensaje);
-            
-
         } catch (error) {
             if (error.status === 401) {
                 alert("Nombre o contraseña incorrecta.");
